@@ -1,17 +1,18 @@
 from numpy import int64 as np_int64
 from numpy import float64 as np_float64
-import pymysql
+from pandas import DataFrame as pd_DataFrame
+from pymysql import connect as pymysql_connect
 from sys import exit as sys_exit
 from time import localtime
-from pandas import DataFrame as pd_DataFrame
 
 
-def commit(config, command):
+
+def commit(command, config):
     # Connect to MySQL Server
     while True:
         try:
             print('========== Connecting to MySQL Database.... ==========')
-            conn = pymysql.connect(**config)
+            conn = pymysql_connect(**config)
             cursorObject = conn.cursor()
             # Execute SQL command
             cursorObject.execute(command)
@@ -97,7 +98,7 @@ def create(data, first_cat, second_cat, config):
                     else:
                         print("Type not found.")
         print(command)
-        command(command, config)
+        commit(command, config)
     except:
         for i, j in enumerate(data.columns):
             if (i + 1) != len(data.columns):
@@ -119,5 +120,13 @@ def create(data, first_cat, second_cat, config):
                 else:
                     print("Type not found.")
         print(command)
-        command(command, config)
+        commit(command, config)
     return table_name
+
+def insert(data, table_name, config):
+    command = "INSERT INTO cardp." + table_name + " ("
+    for index in range(len(data)):
+        for column_index, column_value in enumerate(data.columns):
+            print()
+
+
