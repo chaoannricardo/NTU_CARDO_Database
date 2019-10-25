@@ -1,13 +1,13 @@
 # import packages needed
+from pymysql import cursors
 import data_processing as dp
 import file_management as fm
 import MySQL_management as sql
-import pymysql
 import Test as t
 
 
 # Input information:
-# "C:\Users\ricardo\Documents\GitHub\College\CARDO_Database\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
+# "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 file_path = input("【注意事項】\n請將從台大網站下載的'xls'檔案，以Excel開啟後，以'CSV (逗號分隔) (*.csv)'方式另存新檔)\n請輸入另存新檔後csv路徑(Shift+滑鼠右鍵 => 複製路徑): ")
 year = input("請輸入年度(EX: 106, 107, 108....): ")
 semester = input("請輸入年度(EX: 1, 2....): ")
@@ -24,7 +24,7 @@ config = {
     'password': 'password',
     'db': 'cardo',
     'charset': 'utf8mb4',
-    'cursorclass': pymysql.cursors.DictCursor,
+    'cursorclass': cursors.DictCursor,
 }
 
 table_name = sql.create(data, first_cat, second_cat, config)
