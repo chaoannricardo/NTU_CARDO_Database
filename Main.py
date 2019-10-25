@@ -1,8 +1,8 @@
 # import packages needed
 from pymysql import cursors
-import data_processing as dp
-import file_management as fm
-import MySQL_management as sql
+import DataProcessing
+import FileManagement
+import DatabaseManagement
 import Test as t
 
 
@@ -13,8 +13,8 @@ year = input("請輸入年度(EX: 106, 107, 108....): ")
 semester = input("請輸入年度(EX: 1, 2....): ")
 
 # Process Starts
-file_path, first_cat, second_cat = fm.get_file(file_path)
-data = dp.data_processing(year, semester, file_path, first_cat, second_cat)
+file_path, first_cat, second_cat = FileManagement.get_file(file_path)
+data = DataProcessing.data_processing(year, semester, file_path, first_cat, second_cat)
 
 # Connect to MySQL database, and execute command
 config = {
@@ -27,10 +27,10 @@ config = {
     'cursorclass': cursors.DictCursor,
 }
 
-table_name = sql.create(data, first_cat, second_cat, config)
+table_name = DatabaseManagement.create(data, first_cat, second_cat, config)
 
 #command = "CREATE TABLE Employee(id int, LastName varchar(32), FirstName varchar(32), DepartmentCode int)"
 
 
 # Remove temporory file
-fm.remove_temp()
+FileManagement.remove_temp()
