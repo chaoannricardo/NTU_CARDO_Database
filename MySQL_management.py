@@ -97,21 +97,7 @@ def create(data, first_cat, second_cat, config):
                     else:
                         print("Type not found.")
         print(command)
-        while True:
-            try:
-                print('========== Connecting to MySQL Database.... ==========')
-                conn = pymysql.connect(**config)
-                cursor_object = conn.cursor()
-                # Execute SQL command
-                cursor_object.execute(command)
-            except BaseException:
-                print("========== Unable to connect to MySQL Database. ==========")
-                print("================= The program has been terminated =================.")
-                sys_exit(0)
-                break
-            else:
-                print("========== Sucessfully connected, command executed ==========")
-                break
+        command(command, config)
     except:
         for i, j in enumerate(data.columns):
             if (i + 1) != len(data.columns):
@@ -133,19 +119,5 @@ def create(data, first_cat, second_cat, config):
                 else:
                     print("Type not found.")
         print(command)
-        while True:
-            try:
-                print('========== Connecting to MySQL Database.... ==========')
-                conn = pymysql.connect(**config)
-                cursor_object = conn.cursor()
-                # Execute SQL command
-                cursor_object.execute(command)
-            except BaseException:
-                print("========== Unable to connect to MySQL Database. ==========")
-                print("================= The program has been terminated =================.")
-                sys_exit(0)
-                break
-            else:
-                print("========== Sucessfully connected, command executed ==========")
-                break
+        command(command, config)
     return table_name
