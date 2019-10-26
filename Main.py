@@ -5,14 +5,38 @@ import FileManagement
 import DatabaseManagement
 
 
-# "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
-insert_file = FileManagement.File(file_path, )
+def get_information():
+    path = input(
+        "【注意事項】\n請將從台大網站下載的'xls'檔案，以Excel開啟後，以'CSV (逗號分隔) (*.csv)'方式另存新檔)\n請輸入另存新檔後csv路徑(Shift+滑鼠右鍵 => 複製路徑): ")
+    while True:
+        sem = input("# 請輸入年度學期(EX: 106-1, 107-2, 108-1....):  ")
+        temp_list = sem.split("-")
+        semester_first = ""
+        semester_second = ""
+        if len(temp_list) != 2:
+            print("# 您輸入的學期格式錯誤，請再輸入一次")
+        else:
+            for i, j in enumerate(temp_list):
+                if i == 0:
+                    semester_first = j
+                elif i == 1:
+                    semester_second = j
+            break
+    while True:
+        fc = input(
+            "# 請輸入本次系列號碼:\n    1:TCP_希望種子培育計畫\n    2:TIP_企業實習計劃說明會\n    3:職涯講堂\n    4:職業工坊\n    5:菁粹會客室\n    0:自行輸入\n# 請輸入:  ")
+        option_list = ["1", "2", "3", "4", "5"]
+        if fc == "0":
+            fc = input("# 請輸入本系列場次名稱: ")
+            break
+        elif fc not in option_list:
+            print("# 您輸入的號碼無效，請再輸入一次")
+        else:
+            break
+    sc = input("# 請輸入本次場次名: (EX: 藍天百腦匯):  ")
+    date = input("# 請輸入'活動'日期(ex: 20191026):  ")
+    return path, sem, semester_first, semester_second, fc, sc, date
 
-# Process Starts
-file_path, first_cat, second_cat = FileManagement.get_file(file_path)
-data = DataProcessing.data_processing(year, semester, file_path, first_cat, second_cat)
-
-# Connect to MySQL database, and execute command
 config = {
     'host': '127.0.0.1',
     'port': 3306,
@@ -23,18 +47,21 @@ config = {
     'cursorclass': cursors.DictCursor,
 }
 
-table_name = DatabaseManagement.create(data, first_cat, second_cat, config)
-
-#command = "CREATE TABLE Employee(id int, LastName varchar(32), FirstName varchar(32), DepartmentCode int)"
-
-
-# Remove temporory file
-FileManagement.remove_temp()
-
-
-def get_information():
-    file_path = input("【注意事項】\n請將從台大網站下載的'xls'檔案，以Excel開啟後，以'CSV (逗號分隔) (*.csv)'方式另存新檔)\n請輸入另存新檔後csv路徑(Shift+滑鼠右鍵 => 複製路徑): ")
-    semester = input("請輸入年度學期(EX: 106-1, 107-2, 108-1....): ")
-    first_cat = input("")
-    second_cat = input("")
-    return file_path, semester, first_cat, second_cat
+# "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
+# Process Starts
+if __name__ == '__main__':
+    path, sem, semester_first, semester_second, fc, sc, date = get_information()
+    loaded_file = FileManagement.File(path,
+                                      sem,
+                                      semester_first,
+                                      semester_second,
+                                      fc,
+                                      sc,
+                                      date)
+    loaded_file.get_file()
+    DataProcessing.data_processing(loaded_file.semester_first,
+                                   loaded_file.semester_second,
+                                   loaded_file.file_path,
+                                   loaded_file.first_cat,
+                                   loaded_file.second_cat)
+    FileManagement.remove_temp()
