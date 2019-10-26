@@ -3,11 +3,11 @@ from sys import exit as sys_exit
 
 
 class File:
-    def __init__(self, path, semester, first_cat, second_cat, date):
+    def __init__(self, path, semester, semester_first, semester_second, first_cat, second_cat, date):
         self.file_path = path
         self.semester = semester
-        self.semester_first = ""
-        self.semester_second = ""
+        self.semester_first = semester_first
+        self.semester_second = semester_second
         self.first_cat = first_cat
         self.second_cat = second_cat
         self.date = date
@@ -21,11 +21,7 @@ class File:
             self.first_cat = "職業工坊"
         elif self.first_cat == "5":
             self.first_cat = "菁粹會客室"
-        elif self.first_cat == "0":
-            self.first_cat = input("# 請輸入本系列場次名稱: ")
-        else:
-            print("# 您輸入的號碼無效，程式終止")
-            sys_exit(0)
+
 
     def get_file(self):
         # edit file path to read in the file
@@ -37,14 +33,14 @@ class File:
             for index, line in enumerate(file):
                 if index == 0:
                     activity_name = line.split(",")[0]
-                    print("# 目前處理活動: ", activity_name)
+                    print("# 目前處理", activity_name, sep="")
                 else:
                     temp_data.write(line)
             file.close()
             temp_data.close()
             print("# 檔案抓取成功，程式繼續")
         except BaseException:
-            print("# 檔案抓取失敗，程式繼續 ")
+            print("# 檔案抓取失敗")
             print("# 您所輸入的路徑不正確或不存在，程式終止")
             sys_exit(0)
 
