@@ -6,11 +6,10 @@ import DatabaseManagement
 import Test as t
 
 
-# Input information:
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
-file_path = input("【注意事項】\n請將從台大網站下載的'xls'檔案，以Excel開啟後，以'CSV (逗號分隔) (*.csv)'方式另存新檔)\n請輸入另存新檔後csv路徑(Shift+滑鼠右鍵 => 複製路徑): ")
-year = input("請輸入年度(EX: 106, 107, 108....): ")
-semester = input("請輸入年度(EX: 1, 2....): ")
+
+
+insert_file = FileManagement.File(file_path, )
 
 # Process Starts
 file_path, first_cat, second_cat = FileManagement.get_file(file_path)
@@ -34,3 +33,11 @@ table_name = DatabaseManagement.create(data, first_cat, second_cat, config)
 
 # Remove temporory file
 FileManagement.remove_temp()
+
+
+def get_information():
+    file_path = input("【注意事項】\n請將從台大網站下載的'xls'檔案，以Excel開啟後，以'CSV (逗號分隔) (*.csv)'方式另存新檔)\n請輸入另存新檔後csv路徑(Shift+滑鼠右鍵 => 複製路徑): ")
+    semester = input("請輸入年度學期(EX: 106-1, 107-2, 108-1....): ")
+    first_cat = input("")
+    second_cat = input("")
+    return file_path, semester, first_cat, second_cat
