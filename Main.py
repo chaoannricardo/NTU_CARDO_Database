@@ -3,12 +3,9 @@ from pymysql import cursors
 import DataProcessing
 import FileManagement
 import DatabaseManagement
-import Test as t
 
 
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
-
-
 insert_file = FileManagement.File(file_path, )
 
 # Process Starts
