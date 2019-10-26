@@ -5,6 +5,7 @@ from sys import exit as sys_exit
 
 # remember to install cryptography (pip install cryptography)
 def data_processing(year, semester, file_path, first_cat, second_cat):
+    print("# 資料處理開始")
     # Process remain data
     year_semester = year + "-" + semester
     try:
@@ -41,17 +42,17 @@ def data_processing(year, semester, file_path, first_cat, second_cat):
         split_file_path_csv = file_path.split(".csv")
         temp_file_path = split_file_path_csv[0] + "_已計算黑名單和CARDO點數.csv"
         data.to_csv(temp_file_path, index=None, header=True, sep=',', encoding="Big5")
-        print("========== 資料處理成功，輸出'_已計算黑名單和CARDO點數.csv' ==========")
+        print("# 資料處理成功，輸出'_已計算黑名單和CARDO點數.csv'")
         # Process Coss-Check CSV
         temp_pivot_source = pd_DataFrame({'出席否': data.loc[:, '出席否'].tolist(),
                                           '報名方式': data.loc[:, '報名方式'].tolist()})
         confusion_matrix = temp_pivot_source.pivot_table(index='出席否',
                                                          columns='報名方式',
                                                          aggfunc=len)
-        print("========== 資料處理成功，列印'_出席確認表' ==========")
+        print("# 資料處理成功，列印'_出席確認表'")
         print(confusion_matrix)
         return data
     except:
-        print("========== 資料處理失敗，程式終止 ==========")
-        print("您所輸入資料是否格式和以前不大一樣？請聯絡維護人員")
+        print("# 資料處理失敗，程式終止")
+        print("# 您所輸入資料是否格式和以前不大一樣？請聯絡維護人員")
         sys_exit(0)
