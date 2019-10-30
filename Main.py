@@ -5,6 +5,17 @@ import FileManagement
 import DatabaseManagement
 
 
+config = {
+    'host': '127.0.0.1',
+    'port': 3306,
+    'user': 'user',
+    'password': 'password',
+    'db': 'cardo',
+    'charset': 'utf8mb4',
+    'cursorclass': cursors.DictCursor,
+}
+
+
 def get_information():
     path = input(
         "【注意事項】\n請將從台大網站下載的'xls'檔案，以Excel開啟後，以'CSV (逗號分隔) (*.csv)'方式另存新檔)\n請輸入另存新檔後csv路徑(Shift+滑鼠右鍵 => 複製路徑): ")
@@ -37,19 +48,8 @@ def get_information():
     date = input("# 請輸入'活動'日期(ex: 20191026):  ")
     return path, sem, semester_first, semester_second, fc, sc, date
 
-config = {
-    'host': '127.0.0.1',
-    'port': 3306,
-    'user': 'user',
-    'password': 'password',
-    'db': 'cardo',
-    'charset': 'utf8mb4',
-    'cursorclass': cursors.DictCursor,
-}
 
-# "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
-# Process Starts
-if __name__ == '__main__':
+def file_sorted():
     path, sem, semester_first, semester_second, fc, sc, date = get_information()
     loaded_file = FileManagement.File(path,
                                       sem,
@@ -65,3 +65,9 @@ if __name__ == '__main__':
                                    loaded_file.first_cat,
                                    loaded_file.second_cat)
     FileManagement.remove_temp()
+
+# "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
+# Process Starts
+if __name__ == '__main__':
+    print()
+
