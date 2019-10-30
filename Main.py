@@ -49,25 +49,20 @@ def get_information():
     return path, sem, semester_first, semester_second, fc, sc, date
 
 
-def file_sorted():
+def raw_data_processing():
     path, sem, semester_first, semester_second, fc, sc, date = get_information()
-    loaded_file = FileManagement.File(path,
-                                      sem,
-                                      semester_first,
-                                      semester_second,
-                                      fc,
-                                      sc,
-                                      date)
+    loaded_file = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
     loaded_file.get_file()
-    DataProcessing.data_processing(loaded_file.semester_first,
-                                   loaded_file.semester_second,
-                                   loaded_file.file_path,
-                                   loaded_file.first_cat,
-                                   loaded_file.second_cat)
+    DataProcessing.data_processing(loaded_file.semester_first, loaded_file.semester_second, loaded_file.file_path, loaded_file.first_cat, loaded_file.second_cat)
     FileManagement.remove_temp()
+
 
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 # Process Starts
 if __name__ == '__main__':
-    print()
+    print("【國立臺灣大學 CARDO 資料處理及資料庫管理程式】")
+    print("")
+    command = input()
+    if command == "1":
+        print()
 
