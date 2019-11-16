@@ -54,9 +54,5 @@ def remove_temp():
 
 if __name__ == '__main__':
     # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
-    file_path = input()
-    kkk = File(file_path, "107-2", "1", "藍天電腦", "2019/1/1")
-    kkk.get_file()
-    print(kkk.file_path)
-    print(kkk.first_cat)
-    remove_temp()
+    print()
+

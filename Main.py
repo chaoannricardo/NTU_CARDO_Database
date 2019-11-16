@@ -36,17 +36,25 @@ def get_information():
     while True:
         fc = input(
             "# 請輸入本次系列號碼:\n    1:TCP_希望種子培育計畫\n    2:TIP_企業實習計劃說明會\n    3:職涯講堂\n    4:職業工坊\n    5:菁粹會客室\n    0:自行輸入\n# 請輸入:  ")
-        option_list = ["1", "2", "3", "4", "5"]
+        option_dict = {
+            "1": "TCP_希望種子培育計畫",
+            "2": "TIP_企業實習計劃說明會",
+            "3": "職涯講堂",
+            "4": "職業工坊",
+            "5": "菁粹會客室"
+        }
         if fc == "0":
-            fc = input("# 請輸入本系列場次名稱: ")
+            fc = input("請自行輸入本次系列活動名稱： ")
             break
-        elif fc not in option_list:
+        elif fc not in option_dict.keys():
             print("# 您輸入的號碼無效，請再輸入一次")
         else:
+            fc = option_dict[fc]
             break
     sc = input("# 請輸入本次場次名: (EX: 藍天百腦匯):  ")
     date = input("# 請輸入'活動'日期(ex: 20191026):  ")
-    return path, sem, semester_first, semester_second, fc, sc, date
+    year = date[0:4]
+    return path, sem, semester_first, semester_second, fc, sc, date, year
 
 
 def raw_data_processing():
@@ -58,15 +66,16 @@ def raw_data_processing():
     FileManagement.remove_temp()
 
 
-# Start List
-def start_list():
+# "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
+# Process Starts
+if __name__ == '__main__':
     print("【國立臺灣大學 CARDO 資料處理及資料庫管理程式】")
     print("# 功能選單：")
     print("# 0. 【離開】程式結束")
     print("# 1. 【活動結束後資料建檔】出席統計表輸入資料庫，生成CSV")
     print("# 2. 【黑名單管理】查詢目前進入黑名單的同學名單")
     print("# 3. 【黑名單管理】黑名單生效")
-    command = input("# 請輸入想要使用的功能代碼")
+    command = input("# 請輸入想要使用的功能代碼： ")
     while True:
         if command not in ["0", "1", "2", "3"]:
             print("# 您輸入的功能代碼不正確，請再輸入一次，或輸入0終止程式")
@@ -74,11 +83,11 @@ def start_list():
             break
     if command == "1":
         # 1. 活動結束：出席統計表輸入資料庫
-        path, sem, semester_first, semester_second, fc, sc, date = get_information()
-        raw_data_processing()
-
-
-# "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
-# Process Starts
-if __name__ == '__main__':
-    start_list()
+        path, sem, semester_first, semester_second, fc, sc, date, year = get_information()
+        file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
+        data = DataProcessing.data_processing(year, sem, path, fc, sc)
+        print(data.head())
+    elif command == "2":
+        print("建置中")
+    elif command == "3":
+        print("建置中")

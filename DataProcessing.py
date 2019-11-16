@@ -51,8 +51,8 @@ def data_processing(year, semester, file_path, first_cat, second_cat):
                                                          aggfunc=len)
         print("# 資料處理成功，列印'_出席確認表'")
         print(confusion_matrix)
-        return data
     except:
         print("# 資料處理失敗，程式終止")
         print("# 您所輸入資料是否格式和以前不大一樣？請聯絡維護人員")
         sys_exit(0)
+    return data
