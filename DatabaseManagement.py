@@ -4,10 +4,16 @@ from pandas import DataFrame as pd_DataFrame
 from pymysql import connect as pymysql_connect
 from sys import exit as sys_exit
 from time import localtime
+import pandas.core.frame.DataFrame
 
 class DatabaseConnection:
-    def __init__(self, config):
+    def __init__(self, data, config):
         self.config = config
+        self.data = data
+        self.table_name = ""
+        if type(self.data) != pandas.core.frame.DataFrame:
+            print("# System Error: Data type error within 'DatabaseManagement.py'")
+            sys_exit(0)
 
     def commit(self, command):
         # Connect to MySQL Server
@@ -27,7 +33,7 @@ class DatabaseConnection:
                 break
 
     # Create table for activity
-    def create(self, data, first_cat, second_cat):
+    def create(self, first_cat, second_cat):
         column_sql_dict = {
             "報名時間": "VARCHAR(32)",
             "姓名": "VARCHAR(32)",
@@ -74,16 +80,16 @@ class DatabaseConnection:
         table_name = str(year) + str(month) + str(day) + "_" + first_cat + "_" + second_cat
         command = "CREATE TABLE " + table_name + " ("
         try:
-            for i, j in enumerate(data.columns):
-                if (i + 1) != len(data.columns):
+            for i, j in enumerate(self.data.columns):
+                if (i + 1) != len(self.data.columns):
                     if j in column_sql_dict:
                         command = command + j + " " + column_sql_dict[j] + ", "
                     else:
-                        if type(data.iloc[0, i]) == str:
+                        if type(self.data.iloc[0, i]) == str:
                             command = command + j + " VARCHAR(32), "
-                        elif type(data.iloc[0, i]) == np_int64:
+                        elif type(self.data.iloc[0, i]) == np_int64:
                             command = command + j + " INT, "
-                        elif type(data.iloc[0, i]) == np_float64:
+                        elif type(self.data.iloc[0, i]) == np_float64:
                             command = command + j + " INT, "
                         else:
                             print("Type not found.")
@@ -91,43 +97,44 @@ class DatabaseConnection:
                     if j in column_sql_dict:
                         command = command + j + " " + column_sql_dict[j] + ")"
                     else:
-                        if type(data.iloc[0, i]) == str:
+                        if type(self.data.iloc[0, i]) == str:
                             command = command + j + " VARCHAR(32))"
-                        elif type(data.iloc[0, i]) == np_int64:
+                        elif type(self.data.iloc[0, i]) == np_int64:
                             command = command + j + " INT)"
-                        elif type(data.iloc[0, i]) == np_float64:
+                        elif type(self.data.iloc[0, i]) == np_float64:
                             command = command + j + " INT)"
                         else:
                             print("Type not found.")
             print(command)
             self.commit(command)
         except:
-            for i, j in enumerate(data.columns):
-                if (i + 1) != len(data.columns):
-                    if type(data.iloc[0, i]) == str:
+            for i, j in enumerate(self.data.columns):
+                if (i + 1) != len(self.data.columns):
+                    if type(self.data.iloc[0, i]) == str:
                         command = command + j + " VARCHAR(32),"
-                    elif type(data.iloc[0, i]) == np_int64:
+                    elif type(self.data.iloc[0, i]) == np_int64:
                         command = command + j + " INT,"
-                    elif type(data.iloc[0, i]) == np_float64:
+                    elif type(self.data.iloc[0, i]) == np_float64:
                         command = command + j + " INT,"
                     else:
                         print("Type not found.")
                 else:
-                    if type(data.iloc[0, i]) == str:
+                    if type(self.data.iloc[0, i]) == str:
                         command = command + j + " VARCHAR(32))"
-                    elif type(data.iloc[0, i]) == np_int64:
+                    elif type(self.data.iloc[0, i]) == np_int64:
                         command = command + j + " INT)"
-                    elif type(data.iloc[0, i]) == np_float64:
+                    elif type(self.data.iloc[0, i]) == np_float64:
                         command = command + j + " INT)"
                     else:
                         print("Type not found.")
             print(command)
             self.commit(command)
+            self.table_name = table_name
         return table_name
 
     # Insert table in Main Table
-    def insert(data, table_name, config):
-        command = "INSERT INTO cardp." + table_name + " ("
+    def insert(self, data):
+        command = "INSERT INTO cardp." + self.table_name + " ("
         for index in range(len(data)):
             for column_index, column_value in enumerate(data.columns):
                 print()
