@@ -22,7 +22,6 @@ class File:
         elif self.first_cat == "5":
             self.first_cat = "菁粹會客室"
 
-
     def get_file(self):
         # edit file path to read in the file
         try:
