@@ -6,26 +6,25 @@ from sys import exit as sys_exit
 from time import localtime
 
 
-
 def commit(command, config):
     # Connect to MySQL Server
     while True:
         try:
-            print('========== Connecting to MySQL Database.... ==========')
+            print('# 連接至MySQL資料庫....')
             conn = pymysql_connect(**config)
-            cursorObject = conn.cursor()
+            cursor_object = conn.cursor()
             # Execute SQL command
-            cursorObject.execute(command)
+            cursor_object.execute(command)
         except BaseException:
-            print("========== Unable to connect to MySQL Database. ==========")
-            print("================= The program has been terminated =================.")
+            print("# 連接失敗，程式終止")
             sys_exit(0)
             break
         else:
-            print("========== Sucessfully connected, command executed ==========")
+            print("# 連接成功，資料庫指令成功執行")
             break
 
 
+# Create table for activity
 def create(data, first_cat, second_cat, config):
     column_sql_dict = {
         "報名時間": "VARCHAR(32)",
@@ -123,10 +122,10 @@ def create(data, first_cat, second_cat, config):
         commit(command, config)
     return table_name
 
+
+# Insert table in Main Table
 def insert(data, table_name, config):
     command = "INSERT INTO cardp." + table_name + " ("
     for index in range(len(data)):
         for column_index, column_value in enumerate(data.columns):
             print()
-
-

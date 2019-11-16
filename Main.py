@@ -62,13 +62,20 @@ def raw_data_processing():
 def start_list():
     print("【國立臺灣大學 CARDO 資料處理及資料庫管理程式】")
     print("# 功能選單：")
-    print("# 1. 活動結束：出席統計輸入資料庫")
+    print("# 0. 【離開】程式結束")
+    print("# 1. 【活動結束後資料建檔】出席統計表輸入資料庫，生成CSV")
+    print("# 2. 【黑名單管理】查詢目前進入黑名單的同學名單")
+    print("# 3. 【黑名單管理】黑名單生效")
     command = input("# 請輸入想要使用的功能代碼")
-    if command not in ["1", "2", "3"]:
-        sys_exit
-    elif command == "1":
-        # 1. 活動結束：出席統計輸入資料庫
-        get_information()
+    while True:
+        if command not in ["0", "1", "2", "3"]:
+            print("# 您輸入的功能代碼不正確，請再輸入一次，或輸入0終止程式")
+        else:
+            break
+    if command == "1":
+        # 1. 活動結束：出席統計表輸入資料庫
+        path, sem, semester_first, semester_second, fc, sc, date = get_information()
+        raw_data_processing()
 
 
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
