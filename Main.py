@@ -56,15 +56,6 @@ def get_information():
     return path, sem, semester_first, semester_second, fc, sc, date
 
 
-def raw_data_processing():
-    path, sem, semester_first, semester_second, fc, sc, date = get_information()
-    loaded_file = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
-    loaded_file.get_file()
-    DataProcessing.data_processing(loaded_file.semester_first, loaded_file.semester_second, loaded_file.file_path,
-                                   loaded_file.first_cat, loaded_file.second_cat)
-    FileManagement.remove_temp()
-
-
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 # Process Starts
 if __name__ == '__main__':
@@ -82,15 +73,19 @@ if __name__ == '__main__':
             break
     if command == "1":
         # 1. 活動結束：出席統計表輸入資料庫
+        # Produce csv file after processing
         path, sem, semester_first, semester_second, fc, sc, date = get_information()
         file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
         file_source.get_file()
-        data = DataProcessing.data_processing(file_source.year,
+        data_source = DataProcessing.Data(file_source.year,
                                               file_source.semester,
                                               file_source.file_path,
                                               file_source.first_cat,
                                               file_source.second_cat)
-
+        data = data_source.data_processing()
+        FileManagement.remove_temp()
+        print(data.columns)
+        # Insert into MySQL Database
     elif command == "2":
         print("建置中")
     elif command == "3":
