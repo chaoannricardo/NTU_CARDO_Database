@@ -11,6 +11,7 @@ class File:
         self.first_cat = first_cat
         self.second_cat = second_cat
         self.date = date
+        self.year = date[0:4]
         if self.first_cat == "1":
             self.first_cat = "TCP_希望種子培育計畫"
         elif self.first_cat == "2":
