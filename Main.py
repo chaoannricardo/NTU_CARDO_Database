@@ -52,7 +52,16 @@ def get_information():
             fc = option_dict[fc]
             break
     sc = input("# 請輸入本次場次名: (EX: 藍天百腦匯):  ")
-    date = input("# 請輸入'活動'日期(ex: 20191026):  ")
+    while True:
+        date = input("# 請輸入'活動'日期(ex: 20191026):  ")
+        if len(date) == 8:
+            try:
+                date = int(date)
+                break
+            except:
+                print("# 您所輸入的時間格式不正確，請再輸入一次")
+        else:
+            print("# 您所輸入的時間格式不正確，請再輸入一次")
     return path, sem, semester_first, semester_second, fc, sc, date
 
 
@@ -89,7 +98,9 @@ if __name__ == '__main__':
         data = data_source.data_processing()
         FileManagement.remove_temp()
         # Insert into MySQL Database
-        database_source = DatabaseManagement.DatabaseConnection(data, config)
+        database_source = DatabaseManagement.DatabaseConnection(data, config, file_source.first_cat, file_source.second_cat, date)
+        database_source.create()
+
     elif command == "2":
         print("建置中")
     elif command == "3":
