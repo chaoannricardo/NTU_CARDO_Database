@@ -7,15 +7,17 @@ from time import localtime
 
 
 class DatabaseConnection:
-    def __init__(self, data, config):
+    def __init__(self, data, config, first_cat, second_cat):
         self.config = config
         self.data = data
         self.table_name = ""
+        self.first_cat = first_cat
+        self.second_cat = second_cat
         try:
             # Test whether the type is pandas dataframe
             self.data.iloc[0:0] = self.data.iloc[0:0]
         except:
-            print("# System error occurred within DatabaseManagement.py")
+            print("# System error occurred within DatabaseManagement.py (data type incorrect.)")
 
     def commit(self, command):
         # Connect to MySQL Server
@@ -35,7 +37,7 @@ class DatabaseConnection:
                 break
 
     # Create table for activity
-    def create(self, first_cat, second_cat):
+    def create(self):
         column_sql_dict = {
             "報名時間": "VARCHAR(32)",
             "姓名": "VARCHAR(32)",
@@ -79,7 +81,7 @@ class DatabaseConnection:
         year = localtime().tm_year
         month = localtime().tm_mon
         day = localtime().tm_mday
-        table_name = str(year) + str(month) + str(day) + "_" + first_cat + "_" + second_cat
+        table_name = str(year) + str(month) + str(day) + "_" + self.first_cat + "_" + self.second_cat
         command = "CREATE TABLE " + table_name + " ("
         try:
             for i, j in enumerate(self.data.columns):
@@ -135,10 +137,10 @@ class DatabaseConnection:
         return table_name
 
     # Insert table in Main Table
-    def insert(self, data):
+    def insert(self):
         command = "INSERT INTO cardp." + self.table_name + " ("
-        for index in range(len(data)):
-            for column_index, column_value in enumerate(data.columns):
+        for index in range(len(self.data)):
+            for column_index, column_value in enumerate(self.data.columns):
                 print()
 
 
