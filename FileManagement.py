@@ -39,7 +39,7 @@ class File:
             file.close()
             temp_data.close()
             print("# 檔案抓取成功，程式繼續")
-        except BaseException:
+        except:
             print("# 檔案抓取失敗")
             print("# 您所輸入的路徑不正確或不存在，程式終止")
             sys_exit(0)

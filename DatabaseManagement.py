@@ -4,7 +4,7 @@ from pandas import DataFrame as pd_DataFrame
 from pymysql import connect as pymysql_connect
 from sys import exit as sys_exit
 from time import localtime
-import pandas.core.frame.DataFrame
+
 
 class DatabaseConnection:
     def __init__(self, data, config):
