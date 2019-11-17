@@ -65,13 +65,17 @@ if __name__ == '__main__':
     print("# 1. 【活動結束後資料建檔】出席統計表輸入資料庫，生成CSV")
     print("# 2. 【黑名單管理】查詢目前進入黑名單的同學名單")
     print("# 3. 【黑名單管理】黑名單生效")
+    print("# 4. 【資料庫查詢】以姓名查詢參加CARDO活動紀錄")
     while True:
         command = input("# 請輸入想要使用的功能代碼： ")
         if command not in ["0", "1", "2", "3"]:
             print("# 您輸入的功能代碼不正確，請再輸入一次，或輸入0終止程式")
         else:
             break
-    if command == "1":
+    if command == "0":
+        print("# 程式結束，謝謝您的使用")
+        sys_exit(0)
+    elif command == "1":
         # 1. 活動結束：出席統計表輸入資料庫
         # Produce csv file after processing
         path, sem, semester_first, semester_second, fc, sc, date = get_information()
