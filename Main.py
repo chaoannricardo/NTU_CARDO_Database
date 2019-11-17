@@ -57,6 +57,7 @@ def get_information():
         if len(date) == 8:
             try:
                 date = int(date)
+                date = str(date)
                 break
             except:
                 print("# 您所輸入的時間格式不正確，請再輸入一次")

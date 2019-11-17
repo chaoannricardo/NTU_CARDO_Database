@@ -52,8 +52,3 @@ def remove_temp():
     except:
         print("# 在工作目錄找不到暫存檔案")
 
-
-if __name__ == '__main__':
-    # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
-    print()
-

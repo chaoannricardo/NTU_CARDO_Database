@@ -7,12 +7,16 @@ from time import localtime
 
 
 class DatabaseConnection:
-    def __init__(self, data, config, first_cat, second_cat):
+    def __init__(self, data, config, first_cat, second_cat, date):
         self.config = config
         self.data = data
         self.table_name = ""
         self.first_cat = first_cat
         self.second_cat = second_cat
+        self.date = date
+        self.year = date[0:4]
+        self.month = date[4:6]
+        self.day = data[6:]
         try:
             # Test whether the type is pandas dataframe
             self.data.iloc[0:0] = self.data.iloc[0:0]
@@ -78,10 +82,7 @@ class DatabaseConnection:
             "CARDO點數": "INT",
             "是否計算黑名單": "VARCHAR(32)"
         }
-        year = localtime().tm_year
-        month = localtime().tm_mon
-        day = localtime().tm_mday
-        table_name = str(year) + str(month) + str(day) + "_" + self.first_cat + "_" + self.second_cat
+        table_name = str(self.year) + str(self.month) + str(self.day) + "_" + self.first_cat + "_" + self.second_cat
         command = "CREATE TABLE " + table_name + " ("
         try:
             for i, j in enumerate(self.data.columns):
@@ -110,7 +111,6 @@ class DatabaseConnection:
                         else:
                             print("Type not found.")
             print(command)
-            self.commit(command)
         except:
             for i, j in enumerate(self.data.columns):
                 if (i + 1) != len(self.data.columns):
