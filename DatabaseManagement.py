@@ -11,9 +11,11 @@ class DatabaseConnection:
         self.config = config
         self.data = data
         self.table_name = ""
-        if type(self.data) != pandas.core.frame.DataFrame:
-            print("# System Error: Data type error within 'DatabaseManagement.py'")
-            sys_exit(0)
+        try:
+            # Test whether the type is pandas dataframe
+            self.data.iloc[0:0] = self.data.iloc[0:0]
+        except:
+            print("# System error occurred within DatabaseManagement.py")
 
     def commit(self, command):
         # Connect to MySQL Server

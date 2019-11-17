@@ -85,7 +85,6 @@ if __name__ == '__main__':
         data = data_source.data_processing()
         FileManagement.remove_temp()
         # Insert into MySQL Database
-        data = ""
         database_source = DatabaseManagement.DatabaseConnection(data, config)
     elif command == "2":
         print("建置中")
