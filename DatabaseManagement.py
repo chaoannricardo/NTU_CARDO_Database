@@ -135,7 +135,6 @@ class DatabaseConnection:
                     else:
                         print("Type not found.")
             print(self.command)
-            self.commit(self.command)
 
     # Insert table in Main Table
     def insert(self):
@@ -201,3 +200,5 @@ if __name__ == '__main__':
     second_cat = "藍天百腦匯"
     date = "20191026"
     database_source = DatabaseConnection(test_data, config, first_cat, second_cat, date)
+    database_source.create()
+    database_source.commit()
