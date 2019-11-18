@@ -4,6 +4,7 @@ from pandas import DataFrame as pd_DataFrame
 from pymysql import connect as pymysql_connect
 from sys import exit as sys_exit
 from time import localtime
+from pymysql import cursors
 
 
 class DatabaseConnection:
@@ -144,6 +145,7 @@ class DatabaseConnection:
                 print()
 
     if __name__ == '__main__':
+        # test dataframe
         test_data = pd_DataFrame({
             "報名時間": [1, 2, 3, 4, 5],
             "姓名": [1, 2, 3, 4, 5],
@@ -184,6 +186,20 @@ class DatabaseConnection:
             "CARDO點數": [1, 2, 3, 4, 5],
             "是否計算黑名單": [1, 2, 3, 4, 5]
         })
+        # test config
+        config = {
+            'host': '127.0.0.1',
+            'port': 3306,
+            'user': 'user',
+            'password': 'password',
+            'db': 'cardo',
+            'charset': 'utf8mb4',
+            'cursorclass': cursors.DictCursor,
+        }
+        first_cat = "TIP 實習"
+        second_cat = "藍天百腦匯"
+        date = "20191026"
+        database_source = DatabaseConnection(test_data, config, first_cat, second_cat, date)
 
 
 
