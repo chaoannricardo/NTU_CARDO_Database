@@ -18,13 +18,14 @@ class DatabaseConnection:
         self.year = date[0:4]
         self.month = date[4:6]
         self.day = data[6:]
+        self.command = ""
         try:
             # Test whether the type is pandas dataframe
             self.data.iloc[0:0] = self.data.iloc[0:0]
         except:
             print("# System error occurred within DatabaseManagement.py (data type incorrect.)")
 
-    def commit(self, command):
+    def commit(self):
         # Connect to MySQL Server
         while True:
             try:
@@ -32,7 +33,8 @@ class DatabaseConnection:
                 conn = pymysql_connect(**self.config)
                 cursor_object = conn.cursor()
                 # Execute SQL command
-                cursor_object.execute(command)
+                cursor_object.execute(self.command)
+                self.command = ""
             except BaseException:
                 print("# 連接失敗，程式終止")
                 sys_exit(0)
@@ -84,56 +86,56 @@ class DatabaseConnection:
             "是否計算黑名單": "VARCHAR(32)"
         }
         table_name = str(self.year) + str(self.month) + str(self.day) + "_" + self.first_cat + "_" + self.second_cat
-        command = "CREATE TABLE " + table_name + " ("
+        self.command = "CREATE TABLE " + table_name + " ("
         try:
             for i, j in enumerate(self.data.columns):
                 if (i + 1) != len(self.data.columns):
                     if j in column_sql_dict:
-                        command = command + j + " " + column_sql_dict[j] + ", "
+                        self.command = self.command + j + " " + column_sql_dict[j] + ", "
                     else:
                         if type(self.data.iloc[0, i]) == str:
-                            command = command + j + " VARCHAR(32), "
+                            self.command = self.command + j + " VARCHAR(32), "
                         elif type(self.data.iloc[0, i]) == np_int64:
-                            command = command + j + " INT, "
+                            self.command = self.command + j + " INT, "
                         elif type(self.data.iloc[0, i]) == np_float64:
-                            command = command + j + " INT, "
+                            self.command = self.command + j + " INT, "
                         else:
                             print("Type not found.")
                 else:
                     if j in column_sql_dict:
-                        command = command + j + " " + column_sql_dict[j] + ")"
+                        self.command = self.command + j + " " + column_sql_dict[j] + ")"
                     else:
                         if type(self.data.iloc[0, i]) == str:
-                            command = command + j + " VARCHAR(32))"
+                            self.command = self.command + j + " VARCHAR(32))"
                         elif type(self.data.iloc[0, i]) == np_int64:
-                            command = command + j + " INT)"
+                            self.command = self.command + j + " INT)"
                         elif type(self.data.iloc[0, i]) == np_float64:
-                            command = command + j + " INT)"
+                            self.command = self.command + j + " INT)"
                         else:
                             print("Type not found.")
-            print(command)
+            print(self.command)
         except:
             for i, j in enumerate(self.data.columns):
                 if (i + 1) != len(self.data.columns):
                     if type(self.data.iloc[0, i]) == str:
-                        command = command + j + " VARCHAR(32),"
+                        self.command = self.command + j + " VARCHAR(32),"
                     elif type(self.data.iloc[0, i]) == np_int64:
-                        command = command + j + " INT,"
+                        self.command = self.command + j + " INT,"
                     elif type(self.data.iloc[0, i]) == np_float64:
-                        command = command + j + " INT,"
+                        self.command = self.command + j + " INT,"
                     else:
                         print("Type not found.")
                 else:
                     if type(self.data.iloc[0, i]) == str:
-                        command = command + j + " VARCHAR(32))"
+                        self.command = self.command + j + " VARCHAR(32))"
                     elif type(self.data.iloc[0, i]) == np_int64:
-                        command = command + j + " INT)"
+                        self.command = self.command + j + " INT)"
                     elif type(self.data.iloc[0, i]) == np_float64:
-                        command = command + j + " INT)"
+                        self.command = self.command + j + " INT)"
                     else:
                         print("Type not found.")
-            print(command)
-            self.commit(command)
+            print(self.command)
+            self.commit(self.command)
             self.table_name = table_name
         return table_name
 
