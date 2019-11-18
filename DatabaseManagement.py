@@ -11,7 +11,7 @@ class DatabaseConnection:
     def __init__(self, data, config, first_cat, second_cat, date):
         self.config = config
         self.data = data
-        self.table_name = ""
+        self.table_name = date + "_" + first_cat + "_" + second_cat
         self.first_cat = first_cat
         self.second_cat = second_cat
         self.date = date
@@ -34,6 +34,7 @@ class DatabaseConnection:
                 cursor_object = conn.cursor()
                 # Execute SQL command
                 cursor_object.execute(self.command)
+                # Reset command content
                 self.command = ""
             except BaseException:
                 print("# 連接失敗，程式終止")
@@ -85,8 +86,7 @@ class DatabaseConnection:
             "CARDO點數": "INT",
             "是否計算黑名單": "VARCHAR(32)"
         }
-        table_name = str(self.year) + str(self.month) + str(self.day) + "_" + self.first_cat + "_" + self.second_cat
-        self.command = "CREATE TABLE " + table_name + " ("
+        self.command = "CREATE TABLE " + str(self.table_name) + " ("
         try:
             for i, j in enumerate(self.data.columns):
                 if (i + 1) != len(self.data.columns):
@@ -136,12 +136,10 @@ class DatabaseConnection:
                         print("Type not found.")
             print(self.command)
             self.commit(self.command)
-            self.table_name = table_name
-        return table_name
 
     # Insert table in Main Table
     def insert(self):
-        command = "INSERT INTO cardp." + self.table_name + " ("
+        command = "INSERT INTO cardo." + str(self.table_name) + " ("
         for index in range(len(self.data)):
             for column_index, column_value in enumerate(self.data.columns):
                 print()
