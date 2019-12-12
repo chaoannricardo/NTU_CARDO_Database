@@ -69,40 +69,45 @@ def get_information():
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 # Process Starts
 if __name__ == '__main__':
-    print("【國立臺灣大學 CARDO 資料處理及資料庫管理程式】")
-    print("# 功能選單：")
-    print("# 0. 【離開】程式結束")
-    print("# 1. 【活動結束後資料建檔】出席統計表輸入資料庫，生成CSV")
-    print("# 2. 【黑名單管理】查詢目前進入黑名單的同學名單")
-    print("# 3. 【黑名單管理】黑名單生效")
-    print("# 4. 【資料庫查詢】以姓名查詢參加CARDO活動紀錄")
     while True:
-        command = input("# 請輸入想要使用的功能代碼： ")
-        if command not in ["0", "1", "2", "3"]:
-            print("# 您輸入的功能代碼不正確，請再輸入一次，或輸入0終止程式")
-        else:
-            break
-    if command == "0":
-        print("# 程式結束，謝謝您的使用")
-        sys_exit(0)
-    elif command == "1":
-        # 1. 活動結束：出席統計表輸入資料庫
-        # Produce csv file after processing
-        path, sem, semester_first, semester_second, fc, sc, date = get_information()
-        file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
-        file_source.get_file()
-        data_source = DataProcessing.Data(file_source.year,
+        print("【國立臺灣大學 CARDO 資料處理及資料庫管理程式】")
+        print("# 功能選單：")
+        print("# 0. 【離開】程式結束")
+        print("# 1. 【活動結束後資料建檔】出席統計表輸入資料庫，生成CSV")
+        print("# 2. 【黑名單管理】查詢目前進入黑名單的同學名單")
+        print("# 3. 【黑名單管理】黑名單生效")
+        print("# 4. 【資料庫查詢】以姓名查詢參加CARDO活動紀錄")
+        while True:
+            command = input("# 請輸入想要使用的功能代碼： ")
+            if command not in ["0", "1", "2", "3"]:
+                print("# 您輸入的功能代碼不正確，請再輸入一次，或輸入0終止程式")
+            else:
+                break
+        if command == "0":
+            print("# 程式結束，謝謝您的使用")
+            sys_exit(0)
+        elif command == "1":
+            # 1. 活動結束：出席統計表輸入資料庫
+            # Produce csv file after processing
+            path, sem, semester_first, semester_second, fc, sc, date = get_information()
+            file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
+            file_source.get_file()
+            data_source = DataProcessing.Data(file_source.year,
                                               file_source.semester,
                                               file_source.file_path,
                                               file_source.first_cat,
                                               file_source.second_cat)
-        data = data_source.data_processing()
-        FileManagement.remove_temp()
-        # Insert into MySQL Database
-        database_source = DatabaseManagement.DatabaseConnection(data, config, file_source.first_cat, file_source.second_cat, date)
-        database_source.create()
-
-    elif command == "2":
-        print("建置中")
-    elif command == "3":
-        print("建置中")
+            data = data_source.data_processing()
+            FileManagement.remove_temp()
+            print('# 成功生成CSV')
+            print('# 返回主選單')
+            print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            # Insert into MySQL Database
+            # database_source = DatabaseManagement.DatabaseConnection(data, config, file_source.first_cat, file_source.second_cat, date)
+            # database_source.create()
+        elif command == "2":
+            print("建置中")
+            print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
+        elif command == "3":
+            print("建置中")
+            print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
