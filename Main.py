@@ -1,4 +1,6 @@
 # import packages needed
+from os import listdir as os_lisdir
+from os import system as os_system
 from pymysql import cursors
 from sys import exit as sys_exit
 from time import sleep as t_sleep
@@ -133,7 +135,13 @@ def get_menu():
     print("# 6. 【資料庫查詢】以姓名查詢參加CARDO活動紀錄")
     print()
     print("【額外功能】")
+    print()
     print("# 7. 【快速建檔】過去手工歷史「計算完成統計表」「輸入資料庫」")
+
+
+def clear_console():
+    clear = lambda: os_system("cls")
+    clear()
 
 
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
@@ -166,11 +174,13 @@ if __name__ == '__main__':
             FileManagement.remove_temp()
             print('# 成功生成CSV')
             print('# 返回主選單')
-            print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            t_sleep(3)
+            clear_console()
         elif command == "2":
             # 2. 【活動結束後資料建檔】「計算完成統計表」「輸入資料庫」
-
-            print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            print("# 功能尚未完成建置")
+            t_sleep(3)
+            clear_console()
         elif command == "3":
             # 3. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
             # Produce csv file after processing
@@ -186,7 +196,6 @@ if __name__ == '__main__':
             FileManagement.remove_temp()
             print('# 成功生成CSV')
             print('# 返回主選單')
-            print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
             # Insert into MySQL Database
             # database_source = DatabaseManagement.DatabaseConnection(data, config, file_source.first_cat, file_source.second_cat, date)
             # database_source.create()
@@ -196,3 +205,9 @@ if __name__ == '__main__':
             print("本功能尚未開通")
         elif command == "6":
             print("本功能尚未開通")
+        elif command == "7":
+            # 7. 【快速建檔】過去手工歷史「計算完成統計表」「輸入資料庫」
+            print("# 請輸入放置過去手工歷史「計算完成統計表」資料夾")
+            print("# ''''重要''''")
+            print("# ")
+            os_lisdir()
