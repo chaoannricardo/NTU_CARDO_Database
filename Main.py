@@ -135,9 +135,20 @@ def clear_console():
     clear()
 
 
+def print_licence():
+    print("----------------------------------------------------------------------------------")
+    print("程式開發者：趙上涵；Ricardo S. Chao")
+    print("E-mail: richiechao95@gmail.com")
+    print("Linkedin: https://www.linkedin.com/in/chaoannricardo/")
+    print("本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database")
+    print("Version: 0.0.0; Last Modified Date: ")
+    print("----------------------------------------------------------------------------------")
+
+
 def log_in():
     try:
         print("【國立臺灣大學管理學院生涯發展中心（CARDO）資料處理及資料庫管理程式】")
+        print_licence()
         print("# 歡迎使用本資料庫系統")
         account = input("# 請輸入使用者帳號： ")
         password = input("# 請輸入使用者密碼： ")
