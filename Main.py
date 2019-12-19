@@ -117,19 +117,30 @@ def get_information_finished():
     return path, sem, semester_first, semester_second, fc, sc, date
 
 
+def get_menu():
+    print("【國立臺灣大學 CARDO 資料處理及資料庫管理程式】")
+    print("# 功能選單：")
+    print("# 0. 【離開】程式結束")
+    print()
+    print("# 【活動結束後資料建檔】")
+    print("# 1. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」（+ 黑名單、CARDO點數、報名方式等)")
+    print("# 2. 【活動結束後資料建檔】「計算完成統計表」「輸入資料庫」")
+    print("# 3. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」")
+    print()
+    print("# 【黑名單管理】")
+    print("# 4. 【黑名單管理】查詢目前進入黑名單的同學名單")
+    print("# 5. 【黑名單管理】黑名單生效")
+    print("# 6. 【資料庫查詢】以姓名查詢參加CARDO活動紀錄")
+    print()
+    print("【額外功能】")
+    print("# 7. 【快速建檔】過去手工歷史「計算完成統計表」「輸入資料庫」")
+
+
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 # Process Starts
 if __name__ == '__main__':
     while True:
-        print("【國立臺灣大學 CARDO 資料處理及資料庫管理程式】")
-        print("# 功能選單：")
-        print("# 0. 【離開】程式結束")
-        print("# 1. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」（+ 黑名單、CARDO點數、報名方式等)")
-        print("# 2. 【活動結束後資料建檔】「計算完成統計表」「輸入資料庫」")
-        print("# 3. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」")
-        print("# 4. 【黑名單管理】查詢目前進入黑名單的同學名單")
-        print("# 5. 【黑名單管理】黑名單生效")
-        print("# 6. 【資料庫查詢】以姓名查詢參加CARDO活動紀錄")
+        get_menu()
         while True:
             command = input("# 請輸入想要使用的功能代碼： ")
             if command not in ["0", "1", "2", "3"]:
@@ -179,3 +190,9 @@ if __name__ == '__main__':
             # Insert into MySQL Database
             # database_source = DatabaseManagement.DatabaseConnection(data, config, file_source.first_cat, file_source.second_cat, date)
             # database_source.create()
+        elif command == "4":
+            print("本功能尚未開通")
+        elif command == "5":
+            print("本功能尚未開通")
+        elif command == "6":
+            print("本功能尚未開通")
