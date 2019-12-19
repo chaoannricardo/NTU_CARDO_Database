@@ -1,5 +1,5 @@
 # import packages needed
-from os import listdir as os_lisdir
+from os import listdir as os_listdir
 from os import system as os_system
 from pymysql import cursors
 from sys import exit as sys_exit
@@ -7,7 +7,6 @@ from time import sleep as t_sleep
 import DataProcessing
 import FileManagement
 import DatabaseManagement
-
 
 
 def get_information():
@@ -170,6 +169,7 @@ def log_in():
         print()
     return config
 
+
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 # Process Starts
 if __name__ == '__main__':
@@ -237,4 +237,4 @@ if __name__ == '__main__':
             print("# 請輸入放置過去手工歷史「計算完成統計表」資料夾")
             print("# ''''重要''''")
             print("# ")
-            os_lisdir()
+            os_listdir()
