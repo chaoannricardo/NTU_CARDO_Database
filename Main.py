@@ -8,15 +8,6 @@ import DataProcessing
 import FileManagement
 import DatabaseManagement
 
-config = {
-    'host': '127.0.0.1',
-    'port': 3306,
-    'user': 'user',
-    'password': 'password',
-    'db': 'cardo',
-    'charset': 'utf8mb4',
-    'cursorclass': cursors.DictCursor,
-}
 
 
 def get_information():
@@ -120,7 +111,6 @@ def get_information_finished():
 
 
 def get_menu():
-    print("【國立臺灣大學 CARDO 資料處理及資料庫管理程式】")
     print("# 功能選單：")
     print("# 0. 【離開】程式結束")
     print()
@@ -137,6 +127,7 @@ def get_menu():
     print("【額外功能】")
     print()
     print("# 7. 【快速建檔】過去手工歷史「計算完成統計表」「輸入資料庫」")
+    print()
 
 
 def clear_console():
@@ -144,9 +135,34 @@ def clear_console():
     clear()
 
 
+def log_in():
+    try:
+        print("【國立臺灣大學管理學院生涯發展中心（CARDO）資料處理及資料庫管理程式】")
+        print("# 歡迎使用本資料庫系統")
+        account = input("# 請輸入使用者帳號： ")
+        password = input("# 請輸入使用者密碼： ")
+        config = {
+            'host': '127.0.0.1',
+            'port': 3306,
+            'user': account,
+            'password': password,
+            'db': 'cardo',
+            'charset': 'utf8mb4',
+            'cursorclass': cursors.DictCursor,
+        }
+        # 身分驗證
+        print('# 登入中....')
+        conn = DatabaseManagement.pymysql_connect(**config)
+        print("# 登入成功，歡迎回來", account)
+        t_sleep(3)
+    except:
+        print()
+    return config
+
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 # Process Starts
 if __name__ == '__main__':
+    config = log_in()
     while True:
         get_menu()
         while True:

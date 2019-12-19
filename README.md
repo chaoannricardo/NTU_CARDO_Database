@@ -4,3 +4,8 @@
 
 The package is still under construction, and would be finished soon.
 
+## Envidonment
+* 
+
+## To build up the code 
+To build up the package, type following command:
