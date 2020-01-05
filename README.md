@@ -4,8 +4,8 @@
 
 The program aims to tackle daily tasks , such as data-processing and database-managing, of CARDO (Career Development Office of College of Management) of National Taiwan University. 
 
-* [Required Environment](required-environment)
-* [Build-up](build-up)
+* [Required Environment](#required-environment)
+* [Build-up](#build-up)
 * [Code Description](#code-description)
 * [Functions](#functions)
 
