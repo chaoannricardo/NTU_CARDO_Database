@@ -132,6 +132,8 @@ def get_menu():
 def clear_console():
     clear = lambda: os_system("cls")
     clear()
+    clear = lambda: os_system("clear")
+    clear()
 
 
 def print_licence():
@@ -145,28 +147,43 @@ def print_licence():
 
 
 def log_in():
-    try:
+    while True:
         print("【國立臺灣大學管理學院生涯發展中心（CARDO）資料處理及資料庫管理程式】")
         print_licence()
         print("# 歡迎使用本資料庫系統")
-        account = input("# 請輸入使用者帳號： ")
+        account = input("# 請輸入使用者帳號，或輸入'exit'離開本程式： ")
+        # terminate program if input exit
+        if account == "exit":
+            print("# 謝謝您的使用，歡迎下次光臨。")
+            t_sleep(1)
+            sys_exit(0)
+        # enter password
         password = input("# 請輸入使用者密碼： ")
-        config = {
-            'host': '127.0.0.1',
-            'port': 3306,
-            'user': account,
-            'password': password,
-            'db': 'cardo',
-            'charset': 'utf8mb4',
-            'cursorclass': cursors.DictCursor,
-        }
-        # 身分驗證
-        print('# 登入中....')
-        conn = DatabaseManagement.pymysql_connect(**config)
-        print("# 登入成功，歡迎回來", account)
-        t_sleep(3)
-    except:
-        print()
+        try:
+            config = {
+                'host': '127.0.0.1',
+                'port': 3306,
+                'user': account,
+                'password': password,
+                'db': 'cardo',
+                'charset': 'utf8mb4',
+                'cursorclass': cursors.DictCursor,
+            }
+            # 身分驗證
+            print('# 登入中....')
+            conn = DatabaseManagement.pymysql_connect(**config)
+            print("# 登入成功，歡迎回來", account)
+            print()
+            print()
+            t_sleep(3)
+            clear_console()
+            break
+        except:
+            print("# 您輸入的帳號或密碼錯誤，請再輸入一次。")
+            print()
+            print()
+            t_sleep(1)
+            clear_console()
     return config
 
 
