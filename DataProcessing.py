@@ -14,14 +14,15 @@ class Data:
     # remember to install cryptography (pip install cryptography)
     def data_processing(self):
         print("# 資料處理開始")
+        semester_list = self.semester.split("-")
         # Process remain df
-        year_semester = self.year + "-" + self.semester
         try:
             df = pd_read_csv("./temp_data.csv", encoding="Big5")
             # fill-up year, semester, year_semester value
-            df.loc[:, '年度'] = self.year
-            df.loc[:, '學期'] = self.semester
-            df.loc[:, '年度學期'] = year_semester
+            print(semester_list)
+            df.loc[:, '年度'] = semester_list[0]
+            df.loc[:, '學期'] = semester_list[1]
+            df.loc[:, '年度學期'] = self.semester
             cardo_points = []
             black_list_add = []
             attendance_list = []
@@ -62,5 +63,5 @@ class Data:
         except:
             print("# 資料處理失敗，程式終止")
             print("# 您所輸入資料是否格式和以前不大一樣？請聯絡維護人員")
-            sys_exit(0)
+            print("# 程式終止，返回主選單")
         return df

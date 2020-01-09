@@ -12,7 +12,7 @@ The program aims to tackle daily tasks , such as data-processing and database-ma
 <br>
 
 # Required Environment
-* **Python 3.7 or higher**
+* **Python 3.6**
 * **Numpy**
 * **Pandas**
 * **PyMySQL**
