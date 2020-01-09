@@ -99,7 +99,7 @@ def print_licence():
     print("E-mail: richiechao95@gmail.com")
     print("Linkedin: https://www.linkedin.com/in/chaoannricardo/")
     print("本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database")
-    print("Version: 0.0.0; Last Modified Date: 2020/01/08")
+    print("Version: 0.0.0; Last Modified Date: 2020/01/09")
     print("----------------------------------------------------------------------------------")
 
 
@@ -197,9 +197,10 @@ if __name__ == '__main__':
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             clear_console()
+            FileManagement.remove_temp()
         elif command == "12":
             # 3. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
-            print()
+            print("本功能尚未開通")
         elif command == "20":
             # 4. 【黑名單管理】查詢目前進入黑名單的同學名單
             print("本功能尚未開通")
