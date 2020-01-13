@@ -103,15 +103,80 @@ def print_licence():
 
 
 def admin_control():
-    while True:
-        print("【管理員模式】")
-        command = input("# 請輸入您所需要的功能，或輸入'exit'返回主選單")
-        print("0. 產生主表（本功能將需要一'已登錄出席'之出席統計表）")
-        if command == 'exit':
-            break
-        elif command == "0":
-            print()
-
+    print("【管理員模式】")
+    print("0. 產生主表（本功能將需要一'已登錄出席'之出席統計表，）")
+    command = input("# 請輸入您所需要的功能，或輸入'exit'返回主選單")
+    if command == 'exit':
+        print("# 返回主選單")
+        t_sleep(1)
+        clear_console()
+    elif command == "0":
+        # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
+        account = input("# 請輸入帳號： ")
+        password = input("# 請輸入密碼： ")
+        while True:
+            try:
+                config = {
+                    'host': '127.0.0.1',
+                    'port': 3306,
+                    'user': account,
+                    'password': password,
+                    'db': 'cardo',
+                    'charset': 'utf8mb4',
+                    'cursorclass': cursors.DictCursor,
+                }
+                # 身分驗證
+                print('# 登入中....')
+                conn = DatabaseManagement.pymysql_connect(**config)
+                print("# 登入成功，歡迎回來", account)
+                print()
+                print()
+                t_sleep(1)
+                clear_console()
+                break
+            except:
+                print("# 您輸入的帳號或密碼錯誤，請再輸入一次。")
+                print()
+                print()
+                clear_console()
+        # 12. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
+        # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
+        # Produce csv file after processing
+        path, sem, semester_first, semester_second, fc, sc, date = get_information("10")
+        file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
+        file_source.get_file()
+        data_source = DataProcessing.Data(file_source.year,
+                                          file_source.semester,
+                                          file_source.file_path,
+                                          file_source.first_cat,
+                                          file_source.second_cat)
+        data, produced_df_path = data_source.data_processing()
+        FileManagement.remove_temp()
+        print('# 成功生成CSV')
+        print('# 開始將生成csv輸入資料庫...')
+        # insert data into database
+        file_source = FileManagement.File(produced_df_path, sem, semester_first, semester_second, fc, sc, date)
+        file_source.get_file()
+        # create a temp csv file in utf8 encoding
+        data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
+        # set name of the table
+        db_connection = DatabaseManagement.DatabaseConnection(data, config, fc, sc, date)
+        # create new table for the data
+        db_connection.create()
+        '''
+        To tackle 'The MySQL server is running with the --secure-file-priv option so it cannot execute this statement' error
+        reference: https://blog.csdn.net/fdipzone/article/details/78634992
+        '''
+        # insert data into mysql table
+        db_connection.insert_table()
+        # create main table in mysql database
+        db_connection.create_main_table()
+        # insert data into main mysql table
+        db_connection.insert_main_table()
+        print("# 資料輸入資料庫成功，返回主選單")
+        t_sleep(1)
+        clear_console()
+        FileManagement.remove_temp()
 
 
 def log_in():
@@ -120,46 +185,47 @@ def log_in():
         print("【國立臺灣大學管理學院生涯發展中心（CARDO）資料處理及資料庫管理程式】")
         print_licence()
         print("# 歡迎使用本資料庫系統")
-        account = input("# 請輸入使用者帳號，或輸入'exit'離開本程式： \n 或輸入'admin'進入管理員介面（非管理員請勿使用，以免程式損壞）】")
+        account = input("# 請輸入使用者帳號，或輸入'exit'離開本程式： \n 或輸入'admin'進入管理員介面（非管理員請勿使用，以免程式損壞）")
+        if account == "exit":
+            print("# 謝謝您的使用，歡迎下次光臨。")
+            t_sleep(1)
+            sys_exit(0) # terminate program if input exit
         # log in administrator panel if 'admin' is input
         if account == "admin":
             confirm = input("# 您正在進入管理員介面，輸入'admin'進入，或輸入其他按鍵返回主選單")
             if confirm == "admin":
                 admin_control()
             else:
-                print("返回主選單")
+                print("# 返回主選單")
                 t_sleep(1)
-        # terminate program if input exit
-        if account == "exit":
-            print("# 謝謝您的使用，歡迎下次光臨。")
-            t_sleep(1)
-            sys_exit(0)
-        # enter password
-        password = input("# 請輸入使用者密碼： ")
-        try:
-            config = {
-                'host': '127.0.0.1',
-                'port': 3306,
-                'user': account,
-                'password': password,
-                'db': 'cardo',
-                'charset': 'utf8mb4',
-                'cursorclass': cursors.DictCursor,
-            }
-            # 身分驗證
-            print('# 登入中....')
-            conn = DatabaseManagement.pymysql_connect(**config)
-            print("# 登入成功，歡迎回來", account)
-            print()
-            print()
-            t_sleep(1)
-            clear_console()
-            break
-        except:
-            print("# 您輸入的帳號或密碼錯誤，請再輸入一次。")
-            print()
-            print()
-            clear_console()
+                clear_console()
+        else:
+            # enter password
+            password = input("# 請輸入使用者密碼： ")
+            try:
+                config = {
+                    'host': '127.0.0.1',
+                    'port': 3306,
+                    'user': account,
+                    'password': password,
+                    'db': 'cardo',
+                    'charset': 'utf8mb4',
+                    'cursorclass': cursors.DictCursor,
+                }
+                # 身分驗證
+                print('# 登入中....')
+                conn = DatabaseManagement.pymysql_connect(**config)
+                print("# 登入成功，歡迎回來", account)
+                print()
+                print()
+                t_sleep(1)
+                clear_console()
+                break
+            except:
+                print("# 您輸入的帳號或密碼錯誤，請再輸入一次。")
+                print()
+                print()
+                clear_console()
     return config
 
 
@@ -180,6 +246,7 @@ if __name__ == '__main__':
             sys_exit(0)
         elif command == "10":
             # 10. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」（+ 黑名單、CARDO點數、報名方式等)
+            # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
             # Produce csv file after processing
             path, sem, semester_first, semester_second, fc, sc, date = get_information("10")
             file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
@@ -212,13 +279,16 @@ if __name__ == '__main__':
             reference: https://blog.csdn.net/fdipzone/article/details/78634992
             '''
             # insert data into mysql table
-            db_connection.insert_data()
+            db_connection.insert_table()
+            # insert data into main mysql table
+            db_connection.insert_main_table()
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             clear_console()
             FileManagement.remove_temp()
         elif command == "12":
             # 12. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
+            # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
             # Produce csv file after processing
             path, sem, semester_first, semester_second, fc, sc, date = get_information("10")
             file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
@@ -246,7 +316,9 @@ if __name__ == '__main__':
             reference: https://blog.csdn.net/fdipzone/article/details/78634992
             '''
             # insert data into mysql table
-            db_connection.insert_data()
+            db_connection.insert_table()
+            # insert data into main mysql table
+            db_connection.insert_main_table()
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             clear_console()

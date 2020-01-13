@@ -140,7 +140,7 @@ class DatabaseConnection:
         cursor_object.execute(self.command)
 
     # Insert csv into separate table
-    def insert_data(self):
+    def insert_table(self):
         for a in range(len(self.data)):
             column_command = []
             values_command = []
@@ -149,6 +149,40 @@ class DatabaseConnection:
                 values_command.append(self.data.iloc[a, i])
             # create the command
             command = "INSERT INTO " + self.table_name + " ("
+            for i, j in enumerate(column_command):
+                if i != (len(column_command) - 1):
+                    command += str(j) + ", "
+                else:
+                    command += str(j)
+            command += ") VALUES ("
+            for i, j in enumerate(column_command):
+                int_list = ["學位學分", "訓練總時數", "數位時數", "實體時數", "年度", "學期", "CARDO點數"]
+                if i != (len(column_command) - 1):
+                    if j in int_list:
+                        command += str(values_command[i]) + ", "
+                    else:
+                        command += "'" + str(values_command[i]) + "', "
+                else:
+                    if j in int_list:
+                        command += str(values_command[i])
+                    else:
+                        command += "'" + str(values_command[i]) + "');"
+            conn = pymysql_connect(**self.config)
+            cursor_object = conn.cursor()
+            # Execute SQL command
+            cursor_object.execute(command)
+            conn.commit()
+
+    def insert_main_table(self):
+        for a in range(len(self.data)):
+            column_command = []
+            values_command = []
+            for i, j in enumerate(self.data.columns):
+                column_command.append(self.data.columns[i])
+                values_command.append(self.data.iloc[a, i])
+            # create the command
+            main_table_name = "主資料表"
+            command = "INSERT INTO " + main_table_name + " ("
             for i, j in enumerate(column_command):
                 if i != (len(column_command) - 1):
                     command += str(j) + ", "
@@ -214,7 +248,7 @@ class DatabaseConnection:
             "CARDO點數": "INT",
             "是否計算黑名單": "VARCHAR(100)"
         }
-        main_table_name = input("# 請輸入您需求的主表名稱： ")
+        main_table_name = "主資料表"
         self.command = "CREATE TABLE " + main_table_name + " ("
         try:
             for i, j in enumerate(self.data.columns):
