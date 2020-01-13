@@ -64,4 +64,4 @@ class Data:
             print("# 資料處理失敗，程式終止")
             print("# 您所輸入資料是否格式和以前不大一樣？請聯絡維護人員")
             print("# 程式終止，返回主選單")
-        return df
+        return df, temp_file_path

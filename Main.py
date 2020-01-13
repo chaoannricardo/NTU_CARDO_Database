@@ -99,7 +99,7 @@ def print_licence():
     print("E-mail: richiechao95@gmail.com")
     print("Linkedin: https://www.linkedin.com/in/chaoannricardo/")
     print("本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database")
-    print("Version: 0.0.0; Last Modified Date: 2020/01/09")
+    print("Version: 0.0.0; Last Modified Date: 2020/01/13")
     print("----------------------------------------------------------------------------------")
 
 
@@ -160,7 +160,7 @@ if __name__ == '__main__':
             print("# 程式結束，謝謝您的使用")
             sys_exit(0)
         elif command == "10":
-            # 1. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」（+ 黑名單、CARDO點數、報名方式等)
+            # 10. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」（+ 黑名單、CARDO點數、報名方式等)
             # Produce csv file after processing
             path, sem, semester_first, semester_second, fc, sc, date = get_information("10")
             file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
@@ -170,14 +170,14 @@ if __name__ == '__main__':
                                               file_source.file_path,
                                               file_source.first_cat,
                                               file_source.second_cat)
-            data = data_source.data_processing()
+            data, produced_df_path = data_source.data_processing()
             FileManagement.remove_temp()
             print('# 成功生成CSV')
             print('# 返回主選單')
             t_sleep(3)
             clear_console()
         elif command == "11":
-            # 2. 【活動結束後資料建檔】「計算完成統計表」「輸入資料庫」
+            # 11. 【活動結束後資料建檔】「計算完成統計表」「輸入資料庫」
             # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席)_已計算黑名單和CARDO點數.csv"
             path, sem, semester_first, semester_second, fc, sc, date = get_information("11")
             file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
@@ -199,8 +199,40 @@ if __name__ == '__main__':
             clear_console()
             FileManagement.remove_temp()
         elif command == "12":
-            # 3. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
-            print("本功能尚未開通")
+            # 12. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
+            # Produce csv file after processing
+            path, sem, semester_first, semester_second, fc, sc, date = get_information("10")
+            file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
+            file_source.get_file()
+            data_source = DataProcessing.Data(file_source.year,
+                                              file_source.semester,
+                                              file_source.file_path,
+                                              file_source.first_cat,
+                                              file_source.second_cat)
+            data, produced_df_path = data_source.data_processing()
+            FileManagement.remove_temp()
+            print('# 成功生成CSV')
+            print('# 開始將生成csv輸入資料庫...')
+            # insert data into database
+            file_source = FileManagement.File(produced_df_path, sem, semester_first, semester_second, fc, sc, date)
+            file_source.get_file()
+            # create a temp csv file in utf8 encoding
+            data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
+            # set name of the table
+            db_connection = DatabaseManagement.DatabaseConnection(data, config, fc, sc, date)
+            # create new table for the data
+            db_connection.create()
+            '''
+            To tackle 'The MySQL server is running with the --secure-file-priv option so it cannot execute this statement' error
+            reference: https://blog.csdn.net/fdipzone/article/details/78634992
+            '''
+            # insert data into mysql table
+            db_connection.insert_csv()
+            print("# 資料輸入資料庫成功，返回主選單")
+            t_sleep(1)
+            clear_console()
+            FileManagement.remove_temp()
+
         elif command == "20":
             # 4. 【黑名單管理】查詢目前進入黑名單的同學名單
             print("本功能尚未開通")
