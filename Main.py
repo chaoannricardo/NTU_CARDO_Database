@@ -85,7 +85,6 @@ def get_menu():
     print("【額外功能】")
     print()
     print("# 90. 【快速建檔】過去手工歷史「計算完成統計表」「輸入資料庫」")
-    print()
 
 
 def clear_console():
@@ -103,13 +102,25 @@ def print_licence():
     print("----------------------------------------------------------------------------------")
 
 
+def admin_control():
+    print()
+
+
 def log_in():
     while True:
         print("----------------------------------------------------------------------------------")
         print("【國立臺灣大學管理學院生涯發展中心（CARDO）資料處理及資料庫管理程式】")
         print_licence()
         print("# 歡迎使用本資料庫系統")
-        account = input("# 請輸入使用者帳號，或輸入'exit'離開本程式： ")
+        account = input("# 請輸入使用者帳號，或輸入'exit'離開本程式： \n 或輸入'admin'進入管理員介面（非管理員請勿使用，以免程式損壞）】")
+        # log in administrator panel if 'admin' is input
+        if account == "admin":
+            confirm = input("# 您正在進入管理員介面，輸入'admin'進入，或輸入其他按鍵返回主選單")
+            if confirm == "admin":
+                admin_control()
+            else:
+                print("返回主選單")
+                t_sleep(1)
         # terminate program if input exit
         if account == "exit":
             print("# 謝謝您的使用，歡迎下次光臨。")
@@ -144,6 +155,7 @@ def log_in():
     return config
 
 
+
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 # Process Starts
 if __name__ == '__main__':
@@ -152,7 +164,7 @@ if __name__ == '__main__':
         get_menu()
         while True:
             command = input("# 請輸入想要使用的功能代碼： ")
-            if command not in ["0", "10", "11", "12", "20", "21", "22", "90"]:
+            if command not in ["0", "10", "11", "12", "20", "21", "22", "90", "admin"]:
                 print("# 您輸入的功能代碼不正確，請再輸入一次，或輸入0終止程式")
             else:
                 break
@@ -234,17 +246,18 @@ if __name__ == '__main__':
             FileManagement.remove_temp()
 
         elif command == "20":
-            # 4. 【黑名單管理】查詢目前進入黑名單的同學名單
+            # 20. 【黑名單管理】查詢目前進入黑名單的同學名單
             print("本功能尚未開通")
         elif command == "21":
-            # 5. 【黑名單管理】黑名單生效
+            # 21. 【黑名單管理】黑名單生效
             print("本功能尚未開通")
         elif command == "22":
-            # 6. 【資料庫查詢】以姓名查詢參加CARDO活動紀錄
+            # 22. 【資料庫查詢】以姓名查詢參加CARDO活動紀錄
             print("本功能尚未開通")
         elif command == "90":
-            # 7. 【快速建檔】過去手工歷史「計算完成統計表」「輸入資料庫」
+            # 90. 【快速建檔】過去手工歷史「計算完成統計表」「輸入資料庫」
             print("# 請輸入放置過去手工歷史「計算完成統計表」資料夾")
             print("# ''''重要''''")
             print("# ")
             os_listdir()
+
