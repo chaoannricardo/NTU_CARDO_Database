@@ -155,7 +155,6 @@ def log_in():
     return config
 
 
-
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 # Process Starts
 if __name__ == '__main__':
@@ -205,7 +204,7 @@ if __name__ == '__main__':
             reference: https://blog.csdn.net/fdipzone/article/details/78634992
             '''
             # insert data into mysql table
-            db_connection.insert_csv()
+            db_connection.insert_data()
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             clear_console()
@@ -239,7 +238,7 @@ if __name__ == '__main__':
             reference: https://blog.csdn.net/fdipzone/article/details/78634992
             '''
             # insert data into mysql table
-            db_connection.insert_csv()
+            db_connection.insert_data()
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             clear_console()

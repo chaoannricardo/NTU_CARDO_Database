@@ -4,6 +4,7 @@ from numpy import float64 as np_float64
 from pymysql import connect as pymysql_connect
 from sys import exit as sys_exit
 from pymysql import cursors
+import Main
 
 
 class DatabaseConnection:
@@ -24,25 +25,25 @@ class DatabaseConnection:
         except:
             print("# System error occurred within DatabaseManagement.py (data type incorrect.)")
 
-    def commit(self):
-        # Connect to MySQL Server
-        while True:
-            try:
-                print('# 連接至MySQL資料庫....')
-                conn = pymysql_connect(**self.config)
-                cursor_object = conn.cursor()
-                # Execute SQL command
-                print(self.command)
-                cursor_object.execute(self.command)
-                # Reset command content
-                self.command = ""
-            except BaseException:
-                print("# 連接失敗，程式終止")
-                sys_exit(0)
-                break
-            else:
-                print("# 連接成功，資料庫指令成功執行")
-                break
+    # def commit(self):
+    #     # Connect to MySQL Server
+    #     while True:
+    #         try:
+    #             print('# 連接至MySQL資料庫....')
+    #             conn = pymysql_connect(**self.config)
+    #             cursor_object = conn.cursor()
+    #             # Execute SQL command
+    #             print(self.command)
+    #             cursor_object.execute(self.command)
+    #             # Reset command content
+    #             self.command = ""
+    #         except BaseException:
+    #             print("# 連接失敗，程式終止")
+    #             sys_exit(0)
+    #             break
+    #         else:
+    #             print("# 連接成功，資料庫指令成功執行")
+    #             break
 
     # Create table for activity
     def create(self):
@@ -139,7 +140,134 @@ class DatabaseConnection:
         cursor_object.execute(self.command)
 
     # Insert csv into separate table
-    def insert_csv(self):
+    def insert_data(self):
+        for a in range(len(self.data)):
+            column_command = []
+            values_command = []
+            for i, j in enumerate(self.data.columns):
+                column_command.append(self.data.columns[i])
+                values_command.append(self.data.iloc[a, i])
+            # create the command
+            command = "INSERT INTO " + self.table_name + " ("
+            for i, j in enumerate(column_command):
+                if i != (len(column_command) - 1):
+                    command += str(j) + ", "
+                else:
+                    command += str(j)
+            command += ") VALUES ("
+            for i, j in enumerate(column_command):
+                int_list = ["學位學分", "訓練總時數", "數位時數", "實體時數", "年度", "學期", "CARDO點數"]
+                if i != (len(column_command) - 1):
+                    if j in int_list:
+                        command += str(values_command[i]) + ", "
+                    else:
+                        command += "'" + str(values_command[i]) + "', "
+                else:
+                    if j in int_list:
+                        command += str(values_command[i])
+                    else:
+                        command += "'" + str(values_command[i]) + "');"
+            conn = pymysql_connect(**self.config)
+            cursor_object = conn.cursor()
+            # Execute SQL command
+            cursor_object.execute(command)
+            conn.commit()
+
+    def create_main_table(self):
+        column_sql_dict = {
+            "報名時間": "VARCHAR(100)",
+            "姓名": "VARCHAR(100)",
+            "身分證字號": "VARCHAR(100)",
+            "性別": "VARCHAR(100)",
+            "生日": "VARCHAR(100)",
+            "身份別": "VARCHAR(100)",
+            "一級單位": "VARCHAR(100)",
+            "二級單位": "VARCHAR(100)",
+            "職稱": "VARCHAR(100)",
+            "聯絡電話": "VARCHAR(100)",
+            "電子郵件": "VARCHAR(100)",
+            "餐食": "VARCHAR(100)",
+            "是否需要公務員時數": "VARCHAR(100)",
+            "成績": "VARCHAR(100)",
+            "合格否": "VARCHAR(100)",
+            "出席否": "VARCHAR(100)",
+            "合格證號": "VARCHAR(100)",
+            "備註": "VARCHAR(100)",
+            "網路位址": "VARCHAR(100)",
+            "帳號": "VARCHAR(100)",
+            "學位學分": "INT",
+            "課程類別代碼": "VARCHAR(100)",
+            "學習類別": "VARCHAR(100)",
+            "上課縣市": "VARCHAR(100)",
+            "期別": "VARCHAR(100)",
+            "訓練總時數": "INT",
+            "訓練總數單位": "VARCHAR(100)",
+            "數位時數": "INT",
+            "實體時數": "INT",
+            "是否有實習過？": "VARCHAR(100)",
+            "年度": "INT",
+            "學期": "INT",
+            "年度學期": "VARCHAR(100)",
+            "類別": "VARCHAR(100)",
+            "場次": "VARCHAR(100)",
+            "報名方式": "VARCHAR(100)",
+            "CARDO點數": "INT",
+            "是否計算黑名單": "VARCHAR(100)"
+        }
+        main_table_name = input("# 請輸入您需求的主表名稱： ")
+        self.command = "CREATE TABLE " + main_table_name + " ("
+        try:
+            for i, j in enumerate(self.data.columns):
+                if (i + 1) != len(self.data.columns):
+                    if j in column_sql_dict:
+                        self.command = self.command + j + " " + column_sql_dict[j] + ", "
+                    else:
+                        if type(self.data.iloc[0, i]) == str:
+                            self.command = self.command + j + " VARCHAR(100), "
+                        elif type(self.data.iloc[0, i]) == np_int64:
+                            self.command = self.command + j + " INT, "
+                        elif type(self.data.iloc[0, i]) == np_float64:
+                            self.command = self.command + j + " INT, "
+                        else:
+                            print("Type not found.")
+                else:
+                    if j in column_sql_dict:
+                        self.command = self.command + j + " " + column_sql_dict[j] + ")"
+                    else:
+                        if type(self.data.iloc[0, i]) == str:
+                            self.command = self.command + j + " VARCHAR(100))"
+                        elif type(self.data.iloc[0, i]) == np_int64:
+                            self.command = self.command + j + " INT)"
+                        elif type(self.data.iloc[0, i]) == np_float64:
+                            self.command = self.command + j + " INT)"
+                        else:
+                            print("Type not found.")
+        except:
+            for i, j in enumerate(self.data.columns):
+                if (i + 1) != len(self.data.columns):
+                    if type(self.data.iloc[0, i]) == str:
+                        self.command = self.command + j + " VARCHAR(100),"
+                    elif type(self.data.iloc[0, i]) == np_int64:
+                        self.command = self.command + j + " INT,"
+                    elif type(self.data.iloc[0, i]) == np_float64:
+                        self.command = self.command + j + " INT,"
+                    else:
+                        print("Type not found.")
+                else:
+                    if type(self.data.iloc[0, i]) == str:
+                        self.command = self.command + j + " VARCHAR(100))"
+                    elif type(self.data.iloc[0, i]) == np_int64:
+                        self.command = self.command + j + " INT)"
+                    elif type(self.data.iloc[0, i]) == np_float64:
+                        self.command = self.command + j + " INT)"
+                    else:
+                        print("Type not found.")
+        conn = pymysql_connect(**self.config)
+        cursor_object = conn.cursor()
+        # Execute SQL command
+        cursor_object.execute(self.command)
+
+        # insert first csv data into database
         for a in range(len(self.data)):
             column_command = []
             values_command = []
