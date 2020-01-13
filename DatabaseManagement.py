@@ -275,7 +275,7 @@ class DatabaseConnection:
                 column_command.append(self.data.columns[i])
                 values_command.append(self.data.iloc[a, i])
             # create the command
-            command = "INSERT INTO " + self.table_name + " ("
+            command = "INSERT INTO " + main_table_name + " ("
             for i, j in enumerate(column_command):
                 if i != (len(column_command) - 1):
                     command += str(j) + ", "

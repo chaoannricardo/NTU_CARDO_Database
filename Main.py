@@ -103,7 +103,15 @@ def print_licence():
 
 
 def admin_control():
-    print()
+    while True:
+        print("【管理員模式】")
+        command = input("# 請輸入您所需要的功能，或輸入'exit'返回主選單")
+        print("0. 產生主表（本功能將需要一'已登錄出席'之出席統計表）")
+        if command == 'exit':
+            break
+        elif command == "0":
+            print()
+
 
 
 def log_in():
