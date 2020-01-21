@@ -6,9 +6,10 @@ from pymysql import cursors
 from pandas import read_csv as pd_read_csv
 from sys import exit as sys_exit
 from time import sleep as t_sleep
+import DatabaseConfig
 import DataProcessing
-import FileManagement
 import DatabaseManagement
+import FileManagement
 
 
 def get_information(command):
@@ -116,15 +117,7 @@ def admin_control():
         password = input("# 請輸入密碼： ")
         while True:
             try:
-                config = {
-                    'host': '127.0.0.1',
-                    'port': 3306,
-                    'user': account,
-                    'password': password,
-                    'db': 'cardo',
-                    'charset': 'utf8mb4',
-                    'cursorclass': cursors.DictCursor,
-                }
+                config = DatabaseConfig.get_config(account, password)
                 # 身分驗證
                 print('# 登入中....')
                 conn = DatabaseManagement.pymysql_connect(**config)
