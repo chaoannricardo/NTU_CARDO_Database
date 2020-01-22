@@ -113,9 +113,9 @@ def admin_control():
         clear_console()
     elif command == "0":
         # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
-        account = input("# 請輸入帳號： ")
-        password = input("# 請輸入密碼： ")
         while True:
+            account = input("# 請輸入帳號： ")
+            password = input("# 請輸入密碼： ")
             try:
                 config = DatabaseConfig.get_config(account, password)
                 # 身分驗證
@@ -196,15 +196,7 @@ def log_in():
             # enter password
             password = input("# 請輸入使用者密碼： ")
             try:
-                config = {
-                    'host': '127.0.0.1',
-                    'port': 3306,
-                    'user': account,
-                    'password': password,
-                    'db': 'cardo',
-                    'charset': 'utf8mb4',
-                    'cursorclass': cursors.DictCursor,
-                }
+                config = DatabaseConfig.get_config(account, password)
                 # 身分驗證
                 print('# 登入中....')
                 conn = DatabaseManagement.pymysql_connect(**config)
