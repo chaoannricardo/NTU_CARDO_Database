@@ -6,10 +6,10 @@ from pymysql import cursors
 from pandas import read_csv as pd_read_csv
 from sys import exit as sys_exit
 from time import sleep as t_sleep
-import DatabaseConfig
-import DataProcessing
-import DatabaseManagement
-import FileManagement
+import database_config
+import data_processing
+import database_management
+import file_management
 
 
 def get_information(command):
@@ -117,10 +117,10 @@ def admin_control():
             account = input("# 請輸入帳號： ")
             password = input("# 請輸入密碼： ")
             try:
-                config = DatabaseConfig.get_config(account, password)
+                config = database_config.get_config(account, password)
                 # 身分驗證
                 print('# 登入中....')
-                conn = DatabaseManagement.pymysql_connect(**config)
+                conn = database_management.pymysql_connect(**config)
                 print("# 登入成功，歡迎回來", account)
                 print()
                 print()
@@ -136,24 +136,24 @@ def admin_control():
         # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
         # Produce csv file after processing
         path, sem, semester_first, semester_second, fc, sc, date = get_information("10")
-        file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
+        file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
         file_source.get_file()
-        data_source = DataProcessing.Data(file_source.year,
+        data_source = data_processing.Data(file_source.year,
                                           file_source.semester,
                                           file_source.file_path,
                                           file_source.first_cat,
                                           file_source.second_cat)
         data, produced_df_path = data_source.data_processing()
-        FileManagement.remove_temp()
+        file_management.remove_temp()
         print('# 成功生成CSV')
         print('# 開始將生成csv輸入資料庫...')
         # insert data into database
-        file_source = FileManagement.File(produced_df_path, sem, semester_first, semester_second, fc, sc, date)
+        file_source = file_management.File(produced_df_path, sem, semester_first, semester_second, fc, sc, date)
         file_source.get_file()
         # create a temp csv file in utf8 encoding
         data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
         # set name of the table
-        db_connection = DatabaseManagement.DatabaseConnection(data, config, fc, sc, date)
+        db_connection = database_management.DatabaseConnection(data, config, fc, sc, date)
         # create new table for the data
         db_connection.create()
         '''
@@ -169,7 +169,7 @@ def admin_control():
         print("# 資料輸入資料庫成功，返回主選單")
         t_sleep(1)
         clear_console()
-        FileManagement.remove_temp()
+        file_management.remove_temp()
 
 
 def log_in():
@@ -196,10 +196,10 @@ def log_in():
             # enter password
             password = input("# 請輸入使用者密碼： ")
             try:
-                config = DatabaseConfig.get_config(account, password)
+                config = database_config.get_config(account, password)
                 # 身分驗證
                 print('# 登入中....')
-                conn = DatabaseManagement.pymysql_connect(**config)
+                conn = database_management.pymysql_connect(**config)
                 print("# 登入成功，歡迎回來", account)
                 print()
                 print()
@@ -234,15 +234,15 @@ if __name__ == '__main__':
             # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
             # Produce csv file after processing
             path, sem, semester_first, semester_second, fc, sc, date = get_information("10")
-            file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
+            file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
             file_source.get_file()
-            data_source = DataProcessing.Data(file_source.year,
+            data_source = data_processing.Data(file_source.year,
                                               file_source.semester,
                                               file_source.file_path,
                                               file_source.first_cat,
                                               file_source.second_cat)
             data, produced_df_path = data_source.data_processing()
-            FileManagement.remove_temp()
+            file_management.remove_temp()
             print('# 成功生成CSV')
             print('# 返回主選單')
             t_sleep(3)
@@ -251,12 +251,12 @@ if __name__ == '__main__':
             # 11. 【活動結束後資料建檔】「計算完成統計表」「輸入資料庫」
             # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席)_已計算黑名單和CARDO點數.csv"
             path, sem, semester_first, semester_second, fc, sc, date = get_information("11")
-            file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
+            file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
             file_source.get_file()
             # create a temp csv file in utf8 encoding
             data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
             # set name of the table
-            db_connection = DatabaseManagement.DatabaseConnection(data, config, fc, sc, date)
+            db_connection = database_management.DatabaseConnection(data, config, fc, sc, date)
             # create new table for the data
             db_connection.create()
             '''
@@ -270,30 +270,30 @@ if __name__ == '__main__':
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             clear_console()
-            FileManagement.remove_temp()
+            file_management.remove_temp()
         elif command == "12":
             # 12. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
             # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
             # Produce csv file after processing
             path, sem, semester_first, semester_second, fc, sc, date = get_information("10")
-            file_source = FileManagement.File(path, sem, semester_first, semester_second, fc, sc, date)
+            file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
             file_source.get_file()
-            data_source = DataProcessing.Data(file_source.year,
+            data_source = data_processing.Data(file_source.year,
                                               file_source.semester,
                                               file_source.file_path,
                                               file_source.first_cat,
                                               file_source.second_cat)
             data, produced_df_path = data_source.data_processing()
-            FileManagement.remove_temp()
+            file_management.remove_temp()
             print('# 成功生成CSV')
             print('# 開始將生成csv輸入資料庫...')
             # insert data into database
-            file_source = FileManagement.File(produced_df_path, sem, semester_first, semester_second, fc, sc, date)
+            file_source = file_management.File(produced_df_path, sem, semester_first, semester_second, fc, sc, date)
             file_source.get_file()
             # create a temp csv file in utf8 encoding
             data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
             # set name of the table
-            db_connection = DatabaseManagement.DatabaseConnection(data, config, fc, sc, date)
+            db_connection = database_management.DatabaseConnection(data, config, fc, sc, date)
             # create new table for the data
             db_connection.create()
             '''
@@ -307,7 +307,7 @@ if __name__ == '__main__':
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             clear_console()
-            FileManagement.remove_temp()
+            file_management.remove_temp()
 
         elif command == "20":
             # 20. 【黑名單管理】查詢目前進入黑名單的同學名單

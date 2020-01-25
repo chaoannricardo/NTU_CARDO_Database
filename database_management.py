@@ -4,7 +4,7 @@ from numpy import float64 as np_float64
 from pymysql import connect as pymysql_connect
 from sys import exit as sys_exit
 from pymysql import cursors
-import Main
+import __init__
 
 
 class DatabaseConnection:
