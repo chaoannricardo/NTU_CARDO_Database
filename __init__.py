@@ -89,7 +89,7 @@ def get_menu():
 
 
 def clear_console():
-    clear = lambda: os_system("cls")
+    clear = lambda: os_system("clear")
     clear()
 
 
