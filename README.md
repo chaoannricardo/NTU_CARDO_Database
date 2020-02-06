@@ -40,6 +40,12 @@ pip install https://github.com/pyinstaller/pyinstaller/archive/develop.tar.gz
 
 2. Execute the program by the **execute.sh** script, if you feel like to execute the program in this method, you must ensure the packages required is correctly installed inside your Anaconda or system environment, or the program may not act correctly. (See [Required Environment](#required-environment]))
 
+
+
+<br>
+
+
+
 **To update the program:**
 
   Simply execute **update.sh** script, the script would automatically update the repository to the latest git version. (by force)
