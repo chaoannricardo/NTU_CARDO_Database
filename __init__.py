@@ -230,7 +230,7 @@ def get_config(account, password):
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 # Process Starts
 if __name__ == '__main__':
-    config = log_in()
+    #config = log_in()
     while True:
         get_menu()
         while True:
