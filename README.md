@@ -1,6 +1,6 @@
 # NTU_CARDO_Database
 
-###  **Version**: 0.0.0 **(Still under construction)**
+###  **Version**: 1.0
 
 The program aims to tackle daily tasks , such as data-processing and database-managing, of CARDO (Career Development Office of College of Management) of National Taiwan University. 
 
