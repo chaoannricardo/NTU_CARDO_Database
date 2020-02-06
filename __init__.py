@@ -6,7 +6,6 @@ from pymysql import cursors
 from pandas import read_csv as pd_read_csv
 from sys import exit as sys_exit
 from time import sleep as t_sleep
-import database_config
 import data_processing
 import database_management
 import file_management
@@ -99,7 +98,7 @@ def print_licence():
     print("E-mail: richiechao95@gmail.com")
     print("Linkedin: https://www.linkedin.com/in/chaoannricardo/")
     print("本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database")
-    print("Version: 0.0.0; Last Modified Date: 2020/01/13")
+    print("Version: 0.0.0; Last Modified Date: 2020/02/06")
     print("----------------------------------------------------------------------------------")
 
 
@@ -117,7 +116,7 @@ def admin_control():
             account = input("# 請輸入帳號： ")
             password = input("# 請輸入密碼： ")
             try:
-                config = database_config.get_config(account, password)
+                config = get_config(account, password)
                 # 身分驗證
                 print('# 登入中....')
                 conn = database_management.pymysql_connect(**config)
@@ -196,7 +195,7 @@ def log_in():
             # enter password
             password = input("# 請輸入使用者密碼： ")
             try:
-                config = database_config.get_config(account, password)
+                config = get_config(account, password)
                 # 身分驗證
                 print('# 登入中....')
                 conn = database_management.pymysql_connect(**config)
@@ -211,6 +210,20 @@ def log_in():
                 print()
                 print()
                 clear_console()
+    return config
+
+
+def get_config(account, password):
+    config = {
+                    'host': '127.0.0.1',
+                    #'host': '220.135.181.17',
+                    'port': 3306,
+                    'user': account,
+                    'password': password,
+                    'db': 'cardo',
+                    'charset': 'utf8mb4',
+                    'cursorclass': cursors.DictCursor,
+                }
     return config
 
 
