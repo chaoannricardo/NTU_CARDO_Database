@@ -12,7 +12,7 @@ The program aims to tackle daily tasks , such as data-processing and database-ma
 <br>
 
 # Required Environment
-* **Python 3.6**
+* **Python 3.7**
 * **Numpy**
 * **Pandas**
 * **PyMySQL**
@@ -22,7 +22,7 @@ The program aims to tackle daily tasks , such as data-processing and database-ma
 
 # Build-up
 
-There are two ways to build up the program:
+**There are two ways to build up the program:**
 
 1. Pack up the code into a **windows .exe file** with **PyInstaller** command inside the directory. To pack up the code in this way, simply type:
 
@@ -38,7 +38,11 @@ pip install pyinstaller
 pip install https://github.com/pyinstaller/pyinstaller/archive/develop.tar.gz
 ```
 
-2. Execute the program by the **start_the_program.sh** script, if you feel like to execute the program in this method, you must ensure the packages required is correctly installed inside your Anaconda or system environment, or the program may not act correctly. (See [Required Environment](#required-environment]))
+2. Execute the program by the **execute.sh** script, if you feel like to execute the program in this method, you must ensure the packages required is correctly installed inside your Anaconda or system environment, or the program may not act correctly. (See [Required Environment](#required-environment]))
+
+**To update the program:**
+
+  Simply execute **update.sh** script, the script would automatically update the repository to the latest git version. (by force)
 
 <br>
 
