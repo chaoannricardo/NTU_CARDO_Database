@@ -6,4 +6,6 @@
 git fetch --all
 git reset --hard origin/master
 
-echo "The repository is successfully updated."
+echo "The repository is successfully updated. \n The script now closing"
+
+sleep 3
