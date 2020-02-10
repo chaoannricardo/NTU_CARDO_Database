@@ -216,8 +216,8 @@ def log_in():
 def get_config(account, password):
     config = {
                     #'host': '127.0.0.1',
-                    #'host': '220.135.181.17',
-                    'host': '10.181.2.121',
+                    'host': '220.133.208.39',
+                    #'host': '10.181.2.121',
                     'port': 3306,
                     'user': account,
                     'password': password,
@@ -231,7 +231,7 @@ def get_config(account, password):
 # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 # Process Starts
 if __name__ == '__main__':
-    #config = log_in()
+    config = log_in()
     while True:
         get_menu()
         while True:
