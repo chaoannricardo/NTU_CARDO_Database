@@ -1,6 +1,6 @@
 # NTU_CARDO_Database
 
-###  **Version**: 1.0
+###  **Version**: 1.1
 
 The program aims to tackle daily tasks , such as data-processing and database-managing, of CARDO (Career Development Office of College of Management) of National Taiwan University. 
 
@@ -27,7 +27,7 @@ The program aims to tackle daily tasks , such as data-processing and database-ma
 1. Pack up the code into a **windows .exe file** with **PyInstaller** command inside the directory. To pack up the code in this way, simply type:
 
 ```shell
-pyinstaller -F ./Main.py
+pyinstaller -F ./__init__.py
 ```
 
 ​	If you do not have PyInstaller inside your environment, you could install it by following commands:
@@ -40,11 +40,7 @@ pip install https://github.com/pyinstaller/pyinstaller/archive/develop.tar.gz
 
 2. Execute the program by the **execute.sh** script, if you feel like to execute the program in this method, you must ensure the packages required is correctly installed inside your Anaconda or system environment, or the program may not act correctly. (See [Required Environment](#required-environment]))
 
-
-
 <br>
-
-
 
 **To update the program:**
 
@@ -54,15 +50,9 @@ pip install https://github.com/pyinstaller/pyinstaller/archive/develop.tar.gz
 
 # Code Description
 
-* DatabaseManagement.py:
-* DataProcessing.py:
-* FileManagement.py:
-* Main.py:
-* start_the_program.sh:
-
-<br>
-
-# Functions
-
-
+* database_management.py:
+* data_processing.py:
+* file_management.py:
+* __init__.py:
+* execute.sh:
 

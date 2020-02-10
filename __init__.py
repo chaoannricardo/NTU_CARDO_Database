@@ -98,7 +98,7 @@ def print_licence():
     print("E-mail: richiechao95@gmail.com")
     print("Linkedin: https://www.linkedin.com/in/chaoannricardo/")
     print("本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database")
-    print("Version: 1.0; Last Modified Date: 2020/02/06")
+    print("Version: 1.1; Last Modified Date: 2020/02/10")
     print("----------------------------------------------------------------------------------")
 
 
