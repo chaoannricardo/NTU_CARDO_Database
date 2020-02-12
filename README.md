@@ -56,6 +56,13 @@ pip install https://github.com/pyinstaller/pyinstaller/archive/develop.tar.gz
 
 <br>
 
+**Running the program the first time:**
+
+1. Make sure that above requirements have been set up correctly.
+2. Remember to initiate **"主資料表"** to establish a main table for later insert usage.
+
+<br>
+
 **To update the program:**
 
   Simply execute **update.sh** script, the script would automatically update the repository to the latest git version. (by force)
