@@ -39,11 +39,11 @@
 
 1. **輸入資料庫帳號及密碼**
 
-<img src="./guide_images/0.PNG" width=600px align='center'></img>
+<img src="./guide_images/0.PNG" width=600px align="middle"></img>
 
 2. **輸入"12"，啟動本次欲使用的功能**
 
-<img src="./guide_images/1.PNG" width=600px align='center'></img>
+<img src="./guide_images/1.PNG" width=600px align="middle"></img>
 
 3. **輸入欲進行處理的資料表路徑**
 
@@ -51,4 +51,4 @@
 
 * 路徑必須是由兩個「"」所包圍的Windows路徑
 
-<img src="./guide_images/2.PNG" width=600px align='center'></img>
+<img src="./guide_images/2.PNG" width=600px align="middle"></img>
