@@ -22,6 +22,20 @@ The program aims to tackle daily tasks , such as data-processing and database-ma
 
 # Build-up
 
+**Before building up the program, make sure that you have**:
+
+1. Installed MySQL database server inside your operating system (testing environment is Ubuntu 18.04)
+2. Granted remote access and implement ODBC feature of the database.
+3. Create a account inside the database and have granted the account with sufficient privileges.
+4. Create a database with the correct charset. (database of the testing environment is using "utf8mb4_general_ci" as the charset of the database.)
+
+```sql
+-- Create a database with utf8 charset
+CREATE DATABASE cardo CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+<br>
+
 **There are two ways to build up the program:**
 
 1. Pack up the code into a **windows .exe file** with **PyInstaller** command inside the directory. To pack up the code in this way, simply type:
