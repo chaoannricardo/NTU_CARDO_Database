@@ -77,7 +77,7 @@ def get_menu():
     print("# 11. 【活動結束後資料建檔】「計算完成統計表」「輸入資料庫」")
     print("# 12. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」")
     print()
-    print("# 【黑名單管理】")
+    print("# 【黑名單管理】(系列功能仍在建置中)")
     print("# 20. 【黑名單管理】查詢目前進入黑名單的同學名單")
     print("# 21. 【黑名單管理】黑名單生效")
     print("# 22. 【資料庫查詢】以姓名查詢參加CARDO活動紀錄")
@@ -98,7 +98,7 @@ def print_licence():
     print("E-mail: richiechao95@gmail.com")
     print("Linkedin: https://www.linkedin.com/in/chaoannricardo/")
     print("本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database")
-    print("Version: 1.1; Last Modified Date: 2020/02/10")
+    print("Version: 1.1; Last Modified Date: 2020/02/12")
     print("----------------------------------------------------------------------------------")
 
 
