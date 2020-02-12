@@ -47,8 +47,18 @@
 
 3. **輸入欲進行處理的資料表路徑**
 
-**注意事項：**
+  **注意事項：**
 
-* 路徑必須是由兩個「"」所包圍的Windows路徑
+* 請確認路徑必須是由兩個「"」所包圍的Windows路徑
+* Shift + 滑鼠右鍵「複製路徑」可以得到該檔案的路徑
 
 <img src="./guide_images/2.PNG" width=600px align="middle"></img>
+
+4. **按照指示輸入程式所需要的資料**
+
+<img src="./guide_images/3.PNG" width=600px align="middle"></img>
+
+5. **收集完成所需要的資訊後，程式會將剩餘的工作完成，並產生出席確認表供使用者與簽到單做人數確認，如下圖：**
+
+<img src="./guide_images/4.PNG" width=600px align="middle"></img>
+
