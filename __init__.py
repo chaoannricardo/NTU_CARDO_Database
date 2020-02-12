@@ -216,8 +216,8 @@ def log_in():
 def get_config(account, password):
     config = {
                     #'host': '127.0.0.1',
-                    'host': '220.133.208.39',
-                    #'host': '10.181.2.121',
+                    #'host': '220.133.208.39',
+                    'host': '10.181.2.121',
                     'port': 3306,
                     'user': account,
                     'password': password,
