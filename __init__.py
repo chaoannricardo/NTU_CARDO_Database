@@ -99,6 +99,7 @@ def print_licence():
     print("Linkedin: https://www.linkedin.com/in/chaoannricardo/")
     print("本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database")
     print("Version: 1.1; Last Modified Date: 2020/02/12")
+    print("程式導覽手冊：https://github.com/chaoannricardo/NTU_CARDO_Database/blob/master/GUIDE.md")
     print("----------------------------------------------------------------------------------")
 
 
