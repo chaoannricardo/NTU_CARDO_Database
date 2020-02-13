@@ -153,7 +153,7 @@ def admin_control():
         # create a temp csv file in utf8 encoding
         data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
         # set name of the table
-        db_connection = database_management.DatabaseConnection(data, config, fc, sc, date)
+        db_connection = database_management.DataConnection(data, config, fc, sc, date)
         # create new table for the data
         db_connection.create()
         '''
@@ -272,7 +272,7 @@ if __name__ == '__main__':
             # create a temp csv file in utf8 encoding
             data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
             # set name of the table
-            db_connection = database_management.DatabaseConnection(data, config, fc, sc, date)
+            db_connection = database_management.DataConnection(data, config, fc, sc, date)
             # create new table for the data
             db_connection.create()
             '''
@@ -310,7 +310,7 @@ if __name__ == '__main__':
             # create a temp csv file in utf8 encoding
             data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
             # set name of the table
-            db_connection = database_management.DatabaseConnection(data, config, fc, sc, date)
+            db_connection = database_management.DataConnection(data, config, fc, sc, date)
             # create new table for the data
             db_connection.create()
             '''

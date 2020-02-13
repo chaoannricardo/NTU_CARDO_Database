@@ -9,7 +9,7 @@ from time import localtime
 import __init__
 
 
-class DatabaseConnection:
+class DataConnection:
     def __init__(self, data, config, first_cat, second_cat, date):
         self.config = config
         self.data = data
@@ -127,7 +127,7 @@ class DatabaseConnection:
         cursor_object.execute(self.command)
 
     # Insert csv into separate table
-    def insert_table(self):
+    def insert_table(self, table_name):
         for a in range(len(self.data)):
             column_command = []
             values_command = []
@@ -135,41 +135,7 @@ class DatabaseConnection:
                 column_command.append(self.data.columns[i])
                 values_command.append(self.data.iloc[a, i])
             # create the command
-            command = "INSERT INTO " + self.table_name + " ("
-            for i, j in enumerate(column_command):
-                if i != (len(column_command) - 1):
-                    command += str(j) + ", "
-                else:
-                    command += str(j)
-            command += ") VALUES ("
-            for i, j in enumerate(column_command):
-                int_list = ["學位學分", "訓練總時數", "數位時數", "實體時數", "年度", "學期", "CARDO點數"]
-                if i != (len(column_command) - 1):
-                    if j in int_list:
-                        command += str(values_command[i]) + ", "
-                    else:
-                        command += "'" + str(values_command[i]) + "', "
-                else:
-                    if j in int_list:
-                        command += str(values_command[i])
-                    else:
-                        command += "'" + str(values_command[i]) + "');"
-            conn = pymysql_connect(**self.config)
-            cursor_object = conn.cursor()
-            # Execute SQL command
-            cursor_object.execute(command)
-            conn.commit()
-
-    def insert_main_table(self):
-        for a in range(len(self.data)):
-            column_command = []
-            values_command = []
-            for i, j in enumerate(self.data.columns):
-                column_command.append(self.data.columns[i])
-                values_command.append(self.data.iloc[a, i])
-            # create the command
-            main_table_name = "主資料表"
-            command = "INSERT INTO " + main_table_name + " ("
+            command = "INSERT INTO " + table_name + " ("
             for i, j in enumerate(column_command):
                 if i != (len(column_command) - 1):
                     command += str(j) + ", "
@@ -263,7 +229,6 @@ class SimpleConnection:
         self.file_path = input("# 請輸入你所想存儲資料的路徑： ")
         self.file_path = self.file_path.replace("\\", "/").replace("\"", "") + "/" + time_stamp +"_blacklist_search.csv"
         data.to_csv(self.file_path, encoding="Big5", sep=",", index=False)
-
 
 
 if __name__ == '__main__':
