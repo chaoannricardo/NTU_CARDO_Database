@@ -88,8 +88,12 @@ def get_menu():
 
 
 def clear_console():
-    clear = lambda: os_system("clear")
-    clear()
+    os_system("clear")
+
+
+def bleach_console():
+    for i in range(100):
+        print("\n")
 
 
 def print_licence():
@@ -156,10 +160,6 @@ def admin_control():
         db_connection = database_management.DataConnection(data, config, fc, sc, date)
         # create new table for the data
         db_connection.create_table(db_connection.table_name)
-        '''
-        To tackle 'The MySQL server is running with the --secure-file-priv option so it cannot execute this statement' error
-        reference: https://blog.csdn.net/fdipzone/article/details/78634992
-        '''
         # insert data into mysql table
         db_connection.insert_table(db_connection.table_name)
         # create main table in mysql database
@@ -168,8 +168,8 @@ def admin_control():
         db_connection.insert_table("主資料表")
         print("# 資料輸入資料庫成功，返回主選單")
         t_sleep(1)
-        clear_console()
         file_management.remove_temp()
+        clear_console()
 
 
 def log_in():
@@ -261,7 +261,6 @@ if __name__ == '__main__':
             print('# 成功生成CSV')
             print('# 返回主選單')
             t_sleep(1)
-            clear_console()
 
         elif command == "11":
             # 11. 【活動結束後資料建檔】「計算完成統計表」「輸入資料庫」
@@ -285,7 +284,6 @@ if __name__ == '__main__':
             db_connection.insert_table("主資料表")
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
-            clear_console()
             file_management.remove_temp()
 
         elif command == "12":
@@ -323,7 +321,6 @@ if __name__ == '__main__':
             db_connection.insert_table("主資料表")
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
-            clear_console()
             file_management.remove_temp()
 
         elif command == "20":
@@ -332,7 +329,6 @@ if __name__ == '__main__':
             simple_connection.black_list_search()
             print("# 黑名單列表產生完成，1秒後返回主選單")
             t_sleep(1)
-            clear_console()
 
         elif command == "21":
             # 21. 【黑名單管理】黑名單生效
@@ -346,4 +342,5 @@ if __name__ == '__main__':
             print("# ''''重要''''")
             print("# ")
             os_listdir()
+        bleach_console()
 
