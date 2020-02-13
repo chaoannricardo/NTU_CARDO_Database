@@ -78,7 +78,7 @@ def get_menu():
     print("# 12. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」（標準流程）")
     print()
     print("# 【黑名單管理】(系列功能仍在建置中)")
-    print("# 20. 【黑名單管理】查詢目前進入黑名單的同學名單")
+    print("# 20. 【黑名單管理】計算黑名單")
     print("# 21. 【黑名單管理】黑名單生效")
     print("# 22. 【資料庫查詢】以姓名查詢參加CARDO活動紀錄")
     print()
@@ -260,8 +260,9 @@ if __name__ == '__main__':
             file_management.remove_temp()
             print('# 成功生成CSV')
             print('# 返回主選單')
-            t_sleep(3)
+            t_sleep(1)
             clear_console()
+
         elif command == "11":
             # 11. 【活動結束後資料建檔】「計算完成統計表」「輸入資料庫」
             # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席)_已計算黑名單和CARDO點數.csv"
@@ -286,6 +287,7 @@ if __name__ == '__main__':
             t_sleep(1)
             clear_console()
             file_management.remove_temp()
+
         elif command == "12":
             # 12. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
             # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
@@ -325,9 +327,12 @@ if __name__ == '__main__':
             file_management.remove_temp()
 
         elif command == "20":
-            # 20. 【黑名單管理】查詢目前進入黑名單的同學名單
+            # 20. 【黑名單管理】計算黑名單
             simple_connection = database_management.SimpleConnection(config)
             simple_connection.black_list_search()
+            print("# 黑名單列表產生完成，1秒後返回主選單")
+            t_sleep(1)
+            clear_console()
 
         elif command == "21":
             # 21. 【黑名單管理】黑名單生效

@@ -5,6 +5,7 @@ from pandas import read_sql as pd_read_sql
 from pymysql import connect as pymysql_connect
 from pymysql import cursors
 from sys import exit as sys_exit
+from time import localtime
 import __init__
 
 
@@ -341,16 +342,29 @@ class SimpleConnection:
         self.config = config
 
     def black_list_search(self):
-        self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, 身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, 生日 ORDER BY 黑名單次數 DESC;"
+        print("# 是否只顯示進入黑名單（>=5）的同學列表？(Y/N)")
+        yes_no = input("# 輸入N則會顯示所有同學目前的黑名單技術，並以降冪排序： ")
+        yes_no_list = ["Y", "y", "N", "n"]
+        while True:
+            if yes_no not in yes_no_list:
+                print("# 您所輸入的選項錯誤，請再輸入一次")
+            elif yes_no == "Y" or yes_no == "y":
+                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, 身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, 生日 HAVING SUM(是否計算黑名單) >= 5 ORDER BY 黑名單次數 DESC;"
+                break
+            else:
+                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, 身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, 生日 ORDER BY 黑名單次數 DESC;"
+                break
         conn = pymysql_connect(**self.config)
         #cursor_object = conn.cursor()
         # Execute SQL command
         #cursor_object.execute(self.command)
         # read sql by pandas
         data = pd_read_sql(self.command, conn)
+        time_stamp = str(localtime().tm_year) + str(localtime().tm_mon) + str(localtime().tm_mday)
         self.file_path = input("# 請輸入你所想存儲資料的路徑： ")
-        self.file_path = self.file_path.replace("\\", "/").replace("\"", "")
+        self.file_path = self.file_path.replace("\\", "/").replace("\"", "") + "/" + time_stamp +"_blacklist_search.csv"
         data.to_csv(self.file_path, encoding="Big5", sep=",", index=False)
+
 
 
 if __name__ == '__main__':
