@@ -343,4 +343,5 @@ if __name__ == '__main__':
             print("# ")
             os_listdir()
         bleach_console()
+        clear_console()
 
