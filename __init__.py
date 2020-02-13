@@ -155,17 +155,17 @@ def admin_control():
         # set name of the table
         db_connection = database_management.DataConnection(data, config, fc, sc, date)
         # create new table for the data
-        db_connection.create()
+        db_connection.create_table(db_connection.table_name)
         '''
         To tackle 'The MySQL server is running with the --secure-file-priv option so it cannot execute this statement' error
         reference: https://blog.csdn.net/fdipzone/article/details/78634992
         '''
         # insert data into mysql table
-        db_connection.insert_table()
+        db_connection.insert_table(db_connection.table_name)
         # create main table in mysql database
-        db_connection.create_main_table()
+        db_connection.create_table("主資料表")
         # insert data into main mysql table
-        db_connection.insert_main_table()
+        db_connection.insert_table("主資料表")
         print("# 資料輸入資料庫成功，返回主選單")
         t_sleep(1)
         clear_console()
@@ -274,15 +274,15 @@ if __name__ == '__main__':
             # set name of the table
             db_connection = database_management.DataConnection(data, config, fc, sc, date)
             # create new table for the data
-            db_connection.create()
+            db_connection.create_table(db_connection.table_name)
             '''
             To tackle 'The MySQL server is running with the --secure-file-priv option so it cannot execute this statement' error
             reference: https://blog.csdn.net/fdipzone/article/details/78634992
             '''
             # insert data into mysql table
-            db_connection.insert_table()
+            db_connection.insert_table(db_connection.table_name)
             # insert data into main mysql table
-            db_connection.insert_main_table()
+            db_connection.insert_table("主資料表")
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             clear_console()
@@ -312,15 +312,15 @@ if __name__ == '__main__':
             # set name of the table
             db_connection = database_management.DataConnection(data, config, fc, sc, date)
             # create new table for the data
-            db_connection.create()
+            db_connection.create_table(db_connection.table_name)
             '''
             To tackle 'The MySQL server is running with the --secure-file-priv option so it cannot execute this statement' error
             reference: https://blog.csdn.net/fdipzone/article/details/78634992
             '''
             # insert data into mysql table
-            db_connection.insert_table()
+            db_connection.insert_table(db_connection.table_name)
             # insert data into main mysql table
-            db_connection.insert_main_table()
+            db_connection.insert_table("主資料表")
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             clear_console()

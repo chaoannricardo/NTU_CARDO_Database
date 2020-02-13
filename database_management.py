@@ -68,7 +68,7 @@ class DataConnection:
             print("# System error occurred within DatabaseManagement.py (data type incorrect.)")
 
     # Produce create command
-    def produce_create_command(self, table_name):
+    def create_table(self, table_name):
         self.command = "CREATE TABLE " + str(table_name) + " ("
         try:
             for i, j in enumerate(self.data.columns):
@@ -116,11 +116,6 @@ class DataConnection:
                         self.command = self.command + j + " INT)"
                     else:
                         print("Type not found.")
-        return self.command
-
-    # Create table for activity
-    def create(self):
-        self.command = self.produce_create_command(self.table_name)
         conn = pymysql_connect(**self.config)
         cursor_object = conn.cursor()
         # Execute SQL command
@@ -136,47 +131,6 @@ class DataConnection:
                 values_command.append(self.data.iloc[a, i])
             # create the command
             command = "INSERT INTO " + table_name + " ("
-            for i, j in enumerate(column_command):
-                if i != (len(column_command) - 1):
-                    command += str(j) + ", "
-                else:
-                    command += str(j)
-            command += ") VALUES ("
-            for i, j in enumerate(column_command):
-                int_list = ["學位學分", "訓練總時數", "數位時數", "實體時數", "年度", "學期", "CARDO點數"]
-                if i != (len(column_command) - 1):
-                    if j in int_list:
-                        command += str(values_command[i]) + ", "
-                    else:
-                        command += "'" + str(values_command[i]) + "', "
-                else:
-                    if j in int_list:
-                        command += str(values_command[i])
-                    else:
-                        command += "'" + str(values_command[i]) + "');"
-            conn = pymysql_connect(**self.config)
-            cursor_object = conn.cursor()
-            # Execute SQL command
-            cursor_object.execute(command)
-            conn.commit()
-
-    def create_main_table(self):
-        main_table_name = "主資料表"
-        self.command = self.produce_create_command(main_table_name)
-        conn = pymysql_connect(**self.config)
-        cursor_object = conn.cursor()
-        # Execute SQL command
-        cursor_object.execute(self.command)
-
-        # insert first csv data into database
-        for a in range(len(self.data)):
-            column_command = []
-            values_command = []
-            for i, j in enumerate(self.data.columns):
-                column_command.append(self.data.columns[i])
-                values_command.append(self.data.iloc[a, i])
-            # create the command
-            command = "INSERT INTO " + main_table_name + " ("
             for i, j in enumerate(column_command):
                 if i != (len(column_command) - 1):
                     command += str(j) + ", "
