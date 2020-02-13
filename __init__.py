@@ -326,7 +326,9 @@ if __name__ == '__main__':
 
         elif command == "20":
             # 20. 【黑名單管理】查詢目前進入黑名單的同學名單
-            print("本功能尚未開通")
+            simple_connection = database_management.SimpleConnection(config)
+            simple_connection.black_list_search()
+
         elif command == "21":
             # 21. 【黑名單管理】黑名單生效
             print("本功能尚未開通")

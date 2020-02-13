@@ -1,9 +1,10 @@
 # -*- coding: utf8 -*-
 from numpy import int64 as np_int64
 from numpy import float64 as np_float64
+from pandas import read_sql as pd_read_sql
 from pymysql import connect as pymysql_connect
-from sys import exit as sys_exit
 from pymysql import cursors
+from sys import exit as sys_exit
 import __init__
 
 
@@ -335,11 +336,22 @@ class DatabaseConnection:
             conn.commit()
 
 
+class SimpleConnection:
+    def __init__(self, config):
+        self.config = config
+
+    def black_list_search(self):
+        self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, 身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, 生日 ORDER BY 黑名單次數 DESC;"
+        conn = pymysql_connect(**self.config)
+        #cursor_object = conn.cursor()
+        # Execute SQL command
+        #cursor_object.execute(self.command)
+        # read sql by pandas
+        data = pd_read_sql(self.command, conn)
+        self.file_path = input("# 請輸入你所想存儲資料的路徑： ")
+        self.file_path = self.file_path.replace("\\", "/").replace("\"", "")
+        data.to_csv(self.file_path, encoding="Big5", sep=",", index=False)
+
+
 if __name__ == '__main__':
-    config = Main.log_in()
-    conn = pymysql_connect(**config)
-    cursor_object = conn.cursor()
-    # Execute SQL command
-    command = "INSERT INTO 20191026_TIP_企業實習計劃說明會_藍天百腦匯 (報名時間, 姓名, 身分證字號, 性別, 生日, 身份別, 一級單位, 二級單位, 職稱, 聯絡電話, 電子郵件, 餐食, 是否需要公務員時數, 成績, 合格否, 出席否, 合格證號, 備註, 網路位址, 帳號, 學位學分, 課程類別代碼, 學習類別, 上課縣市, 期別, 訓練總時數, 訓練總數單位, 數位時數, 實體時數, 是否有實習過？, 年度, 學期, 年度學期, 類別, 場次, 報名方式, CARDO點數, 是否計算黑名單) VALUES ('03  6 2019  5:49PM            ', '王?明', 'A130959713', '女', '01/10/1999                    ', '學生', '管理學院                      ', '財金系', '學士班', '988654950', 'nan', '其它', '是', '                              ', 'nan', '是', 'nan', 'nan', 'nan', 'b06703072', 6, '    ', 'p', '10', '2', 107, '1', 1, 10, 'nan', 106, 1, '106-1', 'TCP_希望種子培育計畫', '藍天', '現場報名', 0, '0');"
-    cursor_object.execute(command)
-    conn.commit()
+    print()
