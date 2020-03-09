@@ -6,7 +6,9 @@ from pymysql import connect as pymysql_connect
 from pymysql import cursors
 from sys import exit as sys_exit
 from time import localtime
+from time import sleep as t_sleep
 import __init__
+import pymysql
 
 
 class DataConnection:
@@ -59,7 +61,8 @@ class DataConnection:
             "場次": "VARCHAR(100)",
             "報名方式": "VARCHAR(100)",
             "CARDO點數": "INT",
-            "是否計算黑名單": "VARCHAR(100)"
+            "是否計算黑名單": "VARCHAR(100)",
+            "參加本基礎課程的原因？": "longtext"
         }
         try:
             # Test whether the type is pandas dataframe
@@ -119,7 +122,12 @@ class DataConnection:
         conn = pymysql_connect(**self.config)
         cursor_object = conn.cursor()
         # Execute SQL command
-        cursor_object.execute(self.command)
+        try:
+            cursor_object.execute(self.command)
+        except pymysql.err.DataError:
+            print("# 有欄位內容字元超出資料庫預設限制，請聯絡程式管理員")
+            t_sleep(5)
+            sys_exit()
 
     # Insert csv into separate table
     def insert_table(self, table_name):
@@ -152,8 +160,13 @@ class DataConnection:
             conn = pymysql_connect(**self.config)
             cursor_object = conn.cursor()
             # Execute SQL command
-            cursor_object.execute(command)
-            conn.commit()
+            try:
+                cursor_object.execute(command)
+                conn.commit()
+            except pymysql.err.DataError:
+                t_sleep(5)
+                print("# 有欄位內容字元超出資料庫預設限制，請聯絡程式管理員")
+                sys_exit()
 
 
 class SimpleConnection:
