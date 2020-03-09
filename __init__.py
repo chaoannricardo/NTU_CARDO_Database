@@ -172,21 +172,6 @@ def admin_control():
         clear_console()
 
 
-def get_config(account, password):
-    config = {
-                    #'host': '127.0.0.1',
-                    #'host': '220.133.208.39',
-                    'host': '10.181.2.122',
-                    'port': 3306,
-                    'user': account,
-                    'password': password,
-                    'db': 'cardo',
-                    'charset': 'utf8mb4',
-                    'cursorclass': cursors.DictCursor,
-                }
-    return config
-
-
 def log_in():
     while True:
         print("----------------------------------------------------------------------------------")
@@ -226,6 +211,21 @@ def log_in():
                 print()
                 print()
                 clear_console()
+    return config
+
+
+def get_config(account, password):
+    config = {
+                    #'host': '127.0.0.1',
+                    #'host': '220.133.208.39',
+                    'host': '10.181.2.122',
+                    'port': 3306,
+                    'user': account,
+                    'password': password,
+                    'db': 'cardo',
+                    'charset': 'utf8mb4',
+                    'cursorclass': cursors.DictCursor,
+                }
     return config
 
 
