@@ -46,6 +46,22 @@ def log_in(account_entry, password_entry):
 
 
 def data_processing_menu():
+    # clear the screen
+    for widget in main_frame.winfo_children():
+        widget.destroy()
+
+    # construct menu
+    menu_font_style = tkFont.Font(family="微軟正黑體", size=24)
+    Label(main_frame, text="\n【資料建檔選單】",
+          font=menu_font_style).pack()
+    Label(main_frame, text="   ").pack()
+
+    # construct function list
+    
+
+
+
+
     pass
 
 
@@ -58,9 +74,9 @@ def second_phase():
     for widget in main_frame.winfo_children():
         widget.destroy()
 
-    correct_font_style = tkFont.Font(family="微軟正黑體", size=20)
+    menu_font_style = tkFont.Font(family="微軟正黑體", size=24)
     Label(main_frame, text="\n登入成功\n請選擇所欲使用的功能",
-          font=correct_font_style).pack()
+          font=menu_font_style).pack()
 
     font_style = tkFont.Font(family="微軟正黑體", size=14)
     # create button for csv importing
@@ -103,7 +119,6 @@ def first_phase():
 if __name__ == '__main__':
     # construct window and main frame
     global win, main_frame, authenticate, conn
-    authenticate = False
     win = Tk()
     font_style = tkFont.Font(family="微軟正黑體", size=14)
     win.title("NTU CARDO 資料庫管理系統")
