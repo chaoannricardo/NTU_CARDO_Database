@@ -6,6 +6,7 @@ from pymysql import cursors
 from pandas import read_csv as pd_read_csv
 from sys import exit as sys_exit
 from time import sleep as t_sleep
+import configuration as conf
 import data_processing
 import database_management
 import file_management
@@ -96,17 +97,6 @@ def bleach_console():
         print("\n")
 
 
-def print_licence():
-    print("----------------------------------------------------------------------------------")
-    print("程式開發者：趙上涵；Ricardo S. Chao")
-    print("E-mail: richiechao95@gmail.com")
-    print("Linkedin: https://www.linkedin.com/in/chaoannricardo/")
-    print("本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database")
-    print("Version: 1.1; Last Modified Date: 2020/02/12")
-    print("程式導覽手冊：https://github.com/chaoannricardo/NTU_CARDO_Database/blob/master/GUIDE.md")
-    print("----------------------------------------------------------------------------------")
-
-
 def admin_control():
     print("【管理員模式】")
     print("0. 產生主表（本功能將需要一'已登錄出席'之出席統計表，）")
@@ -121,7 +111,7 @@ def admin_control():
             account = input("# 請輸入帳號： ")
             password = input("# 請輸入密碼： ")
             try:
-                config = get_config(account, password)
+                config = conf.get_config(account, password)
                 # 身分驗證
                 print('# 登入中....')
                 conn = database_management.pymysql_connect(**config)
@@ -176,7 +166,7 @@ def log_in():
     while True:
         print("----------------------------------------------------------------------------------")
         print("【國立臺灣大學管理學院生涯發展中心（CARDO）資料處理及資料庫管理程式】")
-        print_licence()
+        license = conf.print_licence()
         print("# 歡迎使用本資料庫系統")
         account = input("# 請輸入使用者帳號，或輸入'exit'離開本程式： \n 或輸入'admin'進入管理員介面（非管理員請勿使用，以免程式損壞）")
         if account == "exit":
@@ -196,7 +186,7 @@ def log_in():
             # enter password
             password = input("# 請輸入使用者密碼： ")
             try:
-                config = get_config(account, password)
+                config = conf.get_config(account, password)
                 # 身分驗證
                 print('# 登入中....')
                 conn = database_management.pymysql_connect(**config)
@@ -214,25 +204,10 @@ def log_in():
     return config
 
 
-def get_config(account, password):
-    config = {
-                    # 'host': '127.0.0.1',
-                    'host': '220.133.208.39',
-                    # 'host': '10.181.2.122',
-                    'port': 3306,
-                    'user': account,
-                    'password': password,
-                    'db': 'cardo',
-                    'charset': 'utf8mb4',
-                    'cursorclass': cursors.DictCursor,
-                }
-    return config
-
-
-# "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
+# "C:\Users\ricardo\Storage\Github\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
 # Process Starts
 if __name__ == '__main__':
-    config = log_in()
+    config = conf.auto_log_in()
     while True:
         get_menu()
         while True:
