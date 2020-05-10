@@ -1,35 +1,7 @@
-from pymysql import cursors
 from tkinter import *
 from time import sleep as t_sleep
 import database_management
 import tkinter.font as tkFont
-
-
-def get_license():
-    text = "----------------------------------------------------------------------------------\n" + \
-           "程式開發者：趙上涵；Ricardo S. Chao\n" + \
-           "E-mail: richiechao95@gmail.com\n" + \
-           "Linkedin: https://www.linkedin.com/in/chaoannricardo/\n" + \
-           "本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database\n" + \
-           "Version: 2.0; Last Modified Date: 2020/04/26\n" + \
-           "程式導覽手冊：https://github.com/chaoannricardo/NTU_CARDO_Database/blob/master/GUIDE.md\n" + \
-           "----------------------------------------------------------------------------------"
-    return text
-
-
-def get_config(account, password):
-    config = {
-        # 'host': '127.0.0.1',
-        'host': '220.133.208.39',
-        # 'host': '10.181.2.122',
-        'port': 3306,
-        'user': account,
-        'password': password,
-        'db': 'cardo',
-        'charset': 'utf8mb4',
-        'cursorclass': cursors.DictCursor,
-    }
-    return config
 
 
 def log_in(account_entry, password_entry):
@@ -57,7 +29,7 @@ def data_processing_menu():
     Label(main_frame, text="   ").pack()
 
     # construct function list
-    
+
     pass
 
 
@@ -124,5 +96,4 @@ if __name__ == '__main__':
 
     # first phase
     first_phase()
-
     win.mainloop()
