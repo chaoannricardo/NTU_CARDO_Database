@@ -14,7 +14,7 @@ def print_licence():
            "E-mail: richiechao95@gmail.com\n" + \
            "Linkedin: https://www.linkedin.com/in/chaoannricardo/\n" + \
            "本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database\n" + \
-           "Version: 2.0 Beta; Last Modified Date: 2020/04/26\n" + \
+           "Version: 2.0 Beta; Last Modified Date: 2020/05/11\n" + \
            "程式導覽手冊：https://github.com/chaoannricardo/NTU_CARDO_Database/blob/master/GUIDE.md\n" + \
            "----------------------------------------------------------------------------------"
     print(text)
@@ -50,6 +50,4 @@ def auto_log_in():
     print("# 登入成功，歡迎回來", account)
     print()
     print()
-    t_sleep(2)
-    clear_console()
     return config
