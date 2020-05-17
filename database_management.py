@@ -196,18 +196,18 @@ class DataConnection:
 
     # Insert csv into separate table
     def insert_table(self, table_name):
+        # create list of columns of mainframe
+        conn = pymysql_connect(**self.config)
+        show_column_command = "SHOW COLUMNS FROM " + table_name
+        data = pd_read_sql(show_column_command, conn)
+        maintable_column_list = data.iloc[:, 0].tolist()
+
         for a in range(len(self.data)):
             column_command = []
             values_command = []
             for i, j in enumerate(self.data.columns):
                 column_command.append(self.data.columns[i])
                 values_command.append(self.data.iloc[a, i])
-
-            # create list of columns of mainframe
-            conn = pymysql_connect(**self.config)
-            show_column_command = "SHOW COLUMNS FROM " + table_name
-            data = pd_read_sql(show_column_command, conn)
-            maintable_column_list = data.iloc[:, 0].tolist()
 
             # check if all insert columns are inside main table
             if all(item in maintable_column_list for item in column_command):
