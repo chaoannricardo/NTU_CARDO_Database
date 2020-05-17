@@ -11,6 +11,78 @@ import __init__
 import pymysql
 
 
+def get_main_frame_dict():
+    main_frame_dict = {
+        "報名時間": "VARCHAR(100)",
+        "姓名": "VARCHAR(100)",
+        "身分證字號": "VARCHAR(100)",
+        "性別": "VARCHAR(100)",
+        "生日": "VARCHAR(100)",
+        "身份別": "VARCHAR(100)",
+        "一級單位": "VARCHAR(100)",
+        "二級單位": "VARCHAR(100)",
+        "職稱": "VARCHAR(100)",
+        "聯絡電話": "VARCHAR(100)",
+        "電子郵件": "VARCHAR(100)",
+        "餐食": "VARCHAR(100)",
+        "是否需要公務員時數": "VARCHAR(100)",
+        "成績": "VARCHAR(100)",
+        "合格否": "VARCHAR(100)",
+        "出席否": "VARCHAR(100)",
+        "合格證號": "VARCHAR(100)",
+        "備註": "VARCHAR(100)",
+        "網路位址": "VARCHAR(100)",
+        "帳號": "VARCHAR(100)",
+        "學位學分": "INT",
+        "課程類別代碼": "VARCHAR(100)",
+        "學習類別": "VARCHAR(100)",
+        "上課縣市": "VARCHAR(100)",
+        "期別": "VARCHAR(100)",
+        "訓練總時數": "INT",
+        "訓練總數單位": "VARCHAR(100)",
+        "數位時數": "INT",
+        "實體時數": "INT", "報名時間": "VARCHAR(100)",
+        "姓名": "VARCHAR(100)",
+        "身分證字號": "VARCHAR(100)",
+        "性別": "VARCHAR(100)",
+        "生日": "VARCHAR(100)",
+        "身份別": "VARCHAR(100)",
+        "一級單位": "VARCHAR(100)",
+        "二級單位": "VARCHAR(100)",
+        "職稱": "VARCHAR(100)",
+        "聯絡電話": "VARCHAR(100)",
+        "電子郵件": "VARCHAR(100)",
+        "餐食": "VARCHAR(100)",
+        "是否需要公務員時數": "VARCHAR(100)",
+        "成績": "VARCHAR(100)",
+        "合格否": "VARCHAR(100)",
+        "出席否": "VARCHAR(100)",
+        "合格證號": "VARCHAR(100)",
+        "備註": "VARCHAR(100)",
+        "網路位址": "VARCHAR(100)",
+        "帳號": "VARCHAR(100)",
+        "學位學分": "INT",
+        "課程類別代碼": "VARCHAR(100)",
+        "學習類別": "VARCHAR(100)",
+        "上課縣市": "VARCHAR(100)",
+        "期別": "VARCHAR(100)",
+        "訓練總時數": "INT",
+        "訓練總數單位": "VARCHAR(100)",
+        "數位時數": "INT",
+        "是否有實習過？": "VARCHAR(100)",
+        "年度": "INT",
+        "學期": "INT",
+        "年度學期": "VARCHAR(100)",
+        "類別": "VARCHAR(100)",
+        "場次": "VARCHAR(100)",
+        "報名方式": "VARCHAR(100)",
+        "CARDO點數": "INT",
+        "是否計算黑名單": "VARCHAR(100)",
+        "參加本基礎課程的原因？": "longtext"
+    }
+    return main_frame_dict
+
+
 class DataConnection:
     def __init__(self, data, config, first_cat, second_cat, date):
         self.config = config
@@ -23,47 +95,7 @@ class DataConnection:
         self.month = date[4:6]
         self.day = data[6:]
         self.command = ""
-        self.column_sql_dict = {
-            "報名時間": "VARCHAR(100)",
-            "姓名": "VARCHAR(100)",
-            "身分證字號": "VARCHAR(100)",
-            "性別": "VARCHAR(100)",
-            "生日": "VARCHAR(100)",
-            "身份別": "VARCHAR(100)",
-            "一級單位": "VARCHAR(100)",
-            "二級單位": "VARCHAR(100)",
-            "職稱": "VARCHAR(100)",
-            "聯絡電話": "VARCHAR(100)",
-            "電子郵件": "VARCHAR(100)",
-            "餐食": "VARCHAR(100)",
-            "是否需要公務員時數": "VARCHAR(100)",
-            "成績": "VARCHAR(100)",
-            "合格否": "VARCHAR(100)",
-            "出席否": "VARCHAR(100)",
-            "合格證號": "VARCHAR(100)",
-            "備註": "VARCHAR(100)",
-            "網路位址": "VARCHAR(100)",
-            "帳號": "VARCHAR(100)",
-            "學位學分": "INT",
-            "課程類別代碼": "VARCHAR(100)",
-            "學習類別": "VARCHAR(100)",
-            "上課縣市": "VARCHAR(100)",
-            "期別": "VARCHAR(100)",
-            "訓練總時數": "INT",
-            "訓練總數單位": "VARCHAR(100)",
-            "數位時數": "INT",
-            "實體時數": "INT",
-            "是否有實習過？": "VARCHAR(100)",
-            "年度": "INT",
-            "學期": "INT",
-            "年度學期": "VARCHAR(100)",
-            "類別": "VARCHAR(100)",
-            "場次": "VARCHAR(100)",
-            "報名方式": "VARCHAR(100)",
-            "CARDO點數": "INT",
-            "是否計算黑名單": "VARCHAR(100)",
-            "參加本基礎課程的原因？": "longtext"
-        }
+        self.column_sql_dict = get_main_frame_dict()
         try:
             # Test whether the type is pandas dataframe
             self.data.iloc[0:0] = self.data.iloc[0:0]
@@ -99,35 +131,46 @@ class DataConnection:
                             self.command = self.command + j + " INT)"
                         else:
                             print("Type not found.")
+            # Execute SQL command
+            conn = pymysql_connect(**self.config)
+            cursor_object = conn.cursor()
+            cursor_object.execute(self.command)
         except:
             for i, j in enumerate(self.data.columns):
                 if (i + 1) != len(self.data.columns):
-                    if type(self.data.iloc[0, i]) == str:
-                        self.command = self.command + j + " VARCHAR(100),"
-                    elif type(self.data.iloc[0, i]) == np_int64:
-                        self.command = self.command + j + " INT,"
-                    elif type(self.data.iloc[0, i]) == np_float64:
-                        self.command = self.command + j + " INT,"
+                    if j in self.column_sql_dict:
+                        self.command = self.command + j + " " + self.column_sql_dict[j] + ", "
                     else:
-                        print("Type not found.")
+                        if type(self.data.iloc[0, i]) == str:
+                            self.command = self.command + j + " longtext, "
+                        elif type(self.data.iloc[0, i]) == np_int64:
+                            self.command = self.command + j + " INT, "
+                        elif type(self.data.iloc[0, i]) == np_float64:
+                            self.command = self.command + j + " INT, "
+                        else:
+                            print("Type not found.")
                 else:
-                    if type(self.data.iloc[0, i]) == str:
-                        self.command = self.command + j + " VARCHAR(100))"
-                    elif type(self.data.iloc[0, i]) == np_int64:
-                        self.command = self.command + j + " INT)"
-                    elif type(self.data.iloc[0, i]) == np_float64:
-                        self.command = self.command + j + " INT)"
+                    if j in self.column_sql_dict:
+                        self.command = self.command + j + " " + self.column_sql_dict[j] + ")"
                     else:
-                        print("Type not found.")
-        conn = pymysql_connect(**self.config)
-        cursor_object = conn.cursor()
-        # Execute SQL command
-        try:
-            cursor_object.execute(self.command)
-        except pymysql.err.DataError:
-            print("# 有欄位內容字元超出資料庫預設限制，請聯絡程式管理員")
-            t_sleep(5)
-            sys_exit()
+                        if type(self.data.iloc[0, i]) == str:
+                            self.command = self.command + j + " longtext"
+                        elif type(self.data.iloc[0, i]) == np_int64:
+                            self.command = self.command + j + " INT)"
+                        elif type(self.data.iloc[0, i]) == np_float64:
+                            self.command = self.command + j + " INT)"
+                        else:
+                            print("Type not found.")
+
+            try:
+                # Execute SQL command
+                conn = pymysql_connect(**self.config)
+                cursor_object = conn.cursor()
+                cursor_object.execute(self.command)
+            except pymysql.err.DataError:
+                print("# 有欄位內容字元超出資料庫預設限制，請聯絡程式管理員")
+                t_sleep(5)
+                sys_exit()
 
     # Insert csv into separate table
     def insert_table(self, table_name):
