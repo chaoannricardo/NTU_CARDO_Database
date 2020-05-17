@@ -7,8 +7,8 @@ from pymysql import cursors
 from sys import exit as sys_exit
 from time import localtime
 from time import sleep as t_sleep
-import __init__
 import pymysql
+import configuration as conf
 
 
 def get_main_frame_dict():
@@ -41,34 +41,7 @@ def get_main_frame_dict():
         "訓練總時數": "INT",
         "訓練總數單位": "VARCHAR(100)",
         "數位時數": "INT",
-        "實體時數": "INT", "報名時間": "VARCHAR(100)",
-        "姓名": "VARCHAR(100)",
-        "身分證字號": "VARCHAR(100)",
-        "性別": "VARCHAR(100)",
-        "生日": "VARCHAR(100)",
-        "身份別": "VARCHAR(100)",
-        "一級單位": "VARCHAR(100)",
-        "二級單位": "VARCHAR(100)",
-        "職稱": "VARCHAR(100)",
-        "聯絡電話": "VARCHAR(100)",
-        "電子郵件": "VARCHAR(100)",
-        "餐食": "VARCHAR(100)",
-        "是否需要公務員時數": "VARCHAR(100)",
-        "成績": "VARCHAR(100)",
-        "合格否": "VARCHAR(100)",
-        "出席否": "VARCHAR(100)",
-        "合格證號": "VARCHAR(100)",
-        "備註": "VARCHAR(100)",
-        "網路位址": "VARCHAR(100)",
-        "帳號": "VARCHAR(100)",
-        "學位學分": "INT",
-        "課程類別代碼": "VARCHAR(100)",
-        "學習類別": "VARCHAR(100)",
-        "上課縣市": "VARCHAR(100)",
-        "期別": "VARCHAR(100)",
-        "訓練總時數": "INT",
-        "訓練總數單位": "VARCHAR(100)",
-        "數位時數": "INT",
+        "實體時數": "INT",
         "是否有實習過？": "VARCHAR(100)",
         "年度": "INT",
         "學期": "INT",
@@ -147,8 +120,6 @@ class DataConnection:
                             self.command = self.command + j + " INT, "
                         elif type(self.data.iloc[0, i]) == np_float64:
                             self.command = self.command + j + " INT, "
-                        else:
-                            print("Type not found.")
                 else:
                     if j in self.column_sql_dict:
                         self.command = self.command + j + " " + self.column_sql_dict[j] + ")"
@@ -159,8 +130,6 @@ class DataConnection:
                             self.command = self.command + j + " INT)"
                         elif type(self.data.iloc[0, i]) == np_float64:
                             self.command = self.command + j + " INT)"
-                        else:
-                            print("Type not found.")
 
             try:
                 # Execute SQL command
@@ -172,6 +141,59 @@ class DataConnection:
                 t_sleep(5)
                 sys_exit()
 
+    def alter_table(self, table_name, column_command, maintable_column_list):
+        # create list that is not inside mainframe
+        columns_not_in_mainframe = []
+        for i, j in enumerate(column_command):
+            if j not in maintable_column_list:
+                columns_not_in_mainframe.append(j)
+
+        # alter maintable by adding columns not inside main table
+        alter_command = "ALTER TABLE " + table_name + "\nADD COLUMN "
+        try:
+            for i, j in enumerate(columns_not_in_mainframe):
+                if i != (len(column_command) - 1):
+                    if type(self.data.loc[0, str(j)]) == str:
+                        alter_command = alter_command + j + " VARCHAR(100), "
+                    elif type(self.data.loc[0, str(j)]) == np_int64:
+                        alter_command = alter_command + j + " INT, "
+                    elif type(self.data.loc[0, str(j)]) == np_float64:
+                        alter_command = alter_command + j + " INT, "
+                else:
+                    if type(self.data.loc[0, str(j)]) == str:
+                        alter_command = alter_command + j + " VARCHAR(100)"
+                    elif type(self.data.loc[0, str(j)]) == np_int64:
+                        alter_command = alter_command + j + " INT"
+                    elif type(self.data.loc[0, str(j)]) == np_float64:
+                        alter_command = alter_command + j + " INT"
+
+            # execute alter command
+            conn = pymysql_connect(**self.config)
+            cursor_object = conn.cursor()
+            cursor_object.execute(alter_command)
+
+        except pymysql.err.DataError:
+            for i, j in enumerate(columns_not_in_mainframe):
+                if i != (len(column_command) - 1):
+                    if type(self.data.loc[0, str(j)]) == str:
+                        alter_command = alter_command + j + " longtext, "
+                    elif type(self.data.loc[0, str(j)]) == np_int64:
+                        alter_command = alter_command + j + " INT, "
+                    elif type(self.data.loc[0, str(j)]) == np_float64:
+                        alter_command = alter_command + j + " INT, "
+                else:
+                    if type(self.data.loc[0, str(j)]) == str:
+                        alter_command = alter_command + j + " longtext"
+                    elif type(self.data.loc[0, str(j)]) == np_int64:
+                        alter_command = alter_command + j + " INT"
+                    elif type(self.data.loc[0, str(j)]) == np_float64:
+                        alter_command = alter_command + j + " INT"
+
+            # execute alter command
+            conn = pymysql_connect(**self.config)
+            cursor_object = conn.cursor()
+            cursor_object.execute(alter_command)
+
     # Insert csv into separate table
     def insert_table(self, table_name):
         for a in range(len(self.data)):
@@ -180,6 +202,19 @@ class DataConnection:
             for i, j in enumerate(self.data.columns):
                 column_command.append(self.data.columns[i])
                 values_command.append(self.data.iloc[a, i])
+
+            # create list of columns of mainframe
+            conn = pymysql_connect(**self.config)
+            show_column_command = "SHOW COLUMNS FROM " + table_name
+            data = pd_read_sql(show_column_command, conn)
+            maintable_column_list = data.iloc[:, 0].tolist()
+
+            # check if all insert columns are inside main table
+            if all(item in maintable_column_list for item in column_command):
+                pass
+            else:
+                self.alter_table(table_name, column_command, maintable_column_list)
+
             # create the command
             command = "INSERT INTO " + table_name + " ("
             for i, j in enumerate(column_command):
@@ -200,6 +235,7 @@ class DataConnection:
                         command += str(values_command[i])
                     else:
                         command += "'" + str(values_command[i]) + "');"
+
             conn = pymysql_connect(**self.config)
             cursor_object = conn.cursor()
             # Execute SQL command
@@ -224,10 +260,14 @@ class SimpleConnection:
             if yes_no not in yes_no_list:
                 print("# 您所輸入的選項錯誤，請再輸入一次")
             elif yes_no == "Y" or yes_no == "y":
-                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, 身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, 生日 HAVING SUM(是否計算黑名單) >= 5 ORDER BY 黑名單次數 DESC;"
+                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, " \
+                               "身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, " \
+                               "生日 HAVING SUM(是否計算黑名單) >= 5 ORDER BY 黑名單次數 DESC; "
                 break
             else:
-                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, 身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, 生日 ORDER BY 黑名單次數 DESC;"
+                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, " \
+                               "身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, " \
+                               "生日 ORDER BY 黑名單次數 DESC; "
                 break
         conn = pymysql_connect(**self.config)
         #cursor_object = conn.cursor()
@@ -242,4 +282,17 @@ class SimpleConnection:
 
 
 if __name__ == '__main__':
-    print()
+    # config = conf.auto_log_in()
+    # command = "SHOW COLUMNS FROM cardo.主資料表"
+    # conn = pymysql_connect(**config)
+    # data = pd_read_sql(command, conn)
+    # column_list = data.iloc[:, 0].tolist()
+    # # print(data)
+    # # print(data.shape)
+    # print(column_list)
+    a_list = [1, 2, 3]
+    b_list = [1, 2, 3, 4, 5, 6]
+    print(all(item in b_list for item in a_list))
+
+
+
