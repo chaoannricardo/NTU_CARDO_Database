@@ -171,6 +171,7 @@ class DataConnection:
             conn = pymysql_connect(**self.config)
             cursor_object = conn.cursor()
             cursor_object.execute(alter_command)
+            print("alter table finished")
 
         except pymysql.err.DataError:
             for i, j in enumerate(columns_not_in_mainframe):
@@ -238,6 +239,7 @@ class DataConnection:
 
             conn = pymysql_connect(**self.config)
             cursor_object = conn.cursor()
+
             # Execute SQL command
             try:
                 cursor_object.execute(command)
