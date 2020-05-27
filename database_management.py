@@ -175,7 +175,7 @@ class DataConnection:
 
         except pymysql.err.DataError:
             for i, j in enumerate(columns_not_in_mainframe):
-                if i != (len(column_command) - 1):
+                if i != (len(columns_not_in_mainframe) - 1):
                     if type(self.data.loc[0, str(j)]) == str:
                         alter_command = alter_command + j + " longtext, "
                     elif type(self.data.loc[0, str(j)]) == np_int64:
