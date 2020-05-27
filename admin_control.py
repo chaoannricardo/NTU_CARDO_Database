@@ -64,3 +64,6 @@ def admin_control():
         print("# 資料輸入資料庫成功，返回主選單")
         t_sleep(1)
         file_management.remove_temp()
+
+
+

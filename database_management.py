@@ -174,6 +174,8 @@ class DataConnection:
                 # drop the columns that is not inside main table
                 for i, j in enumerate(column_command):
                     if j not in maintable_column_list:
+                        print('# 欄位：', j, '不在被輸入表格內（通常是"主資料表"），因此將不會被輸入，\n' \
+                                          '如果有需要輸入該值，請洽程式設計者')
                         column_command.remove(j)
 
             # revise and append value that we would like to insert
@@ -236,14 +238,15 @@ class SimpleConnection:
                                "生日 ORDER BY 黑名單次數 DESC; "
                 break
         conn = pymysql_connect(**self.config)
-        #cursor_object = conn.cursor()
+        # cursor_object = conn.cursor()
         # Execute SQL command
-        #cursor_object.execute(self.command)
+        # cursor_object.execute(self.command)
         # read sql by pandas
         data = pd_read_sql(self.command, conn)
         time_stamp = str(localtime().tm_year) + str(localtime().tm_mon) + str(localtime().tm_mday)
         self.file_path = input("# 請輸入你所想存儲資料的路徑： ")
-        self.file_path = self.file_path.replace("\\", "/").replace("\"", "") + "/" + time_stamp +"_blacklist_search.csv"
+        self.file_path = self.file_path.replace("\\", "/").replace("\"",
+                                                                   "") + "/" + time_stamp + "_blacklist_search.csv"
         data.to_csv(self.file_path, encoding="Big5", sep=",", index=False)
 
 
@@ -259,6 +262,3 @@ if __name__ == '__main__':
     a_list = [1, 2, 3]
     b_list = [1, 2, 3, 4, 5, 6]
     print(all(item in b_list for item in a_list))
-
-
-
