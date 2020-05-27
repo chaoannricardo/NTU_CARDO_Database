@@ -11,51 +11,6 @@ import pymysql
 import configuration as conf
 
 
-def get_main_frame_dict():
-    main_frame_dict = {
-        "報名時間": "VARCHAR(100)",
-        "姓名": "VARCHAR(100)",
-        "身分證字號": "VARCHAR(100)",
-        "性別": "VARCHAR(100)",
-        "生日": "VARCHAR(100)",
-        "身份別": "VARCHAR(100)",
-        "一級單位": "VARCHAR(100)",
-        "二級單位": "VARCHAR(100)",
-        "職稱": "VARCHAR(100)",
-        "聯絡電話": "VARCHAR(100)",
-        "電子郵件": "VARCHAR(100)",
-        "餐食": "VARCHAR(100)",
-        "是否需要公務員時數": "VARCHAR(100)",
-        "成績": "VARCHAR(100)",
-        "合格否": "VARCHAR(100)",
-        "出席否": "VARCHAR(100)",
-        "合格證號": "VARCHAR(100)",
-        "備註": "VARCHAR(100)",
-        "網路位址": "VARCHAR(100)",
-        "帳號": "VARCHAR(100)",
-        "學位學分": "INT",
-        "課程類別代碼": "VARCHAR(100)",
-        "學習類別": "VARCHAR(100)",
-        "上課縣市": "VARCHAR(100)",
-        "期別": "VARCHAR(100)",
-        "訓練總時數": "INT",
-        "訓練總數單位": "VARCHAR(100)",
-        "數位時數": "INT",
-        "實體時數": "INT",
-        "是否有實習過？": "VARCHAR(100)",
-        "年度": "INT",
-        "學期": "INT",
-        "年度學期": "VARCHAR(100)",
-        "類別": "VARCHAR(100)",
-        "場次": "VARCHAR(100)",
-        "報名方式": "VARCHAR(100)",
-        "CARDO點數": "INT",
-        "是否計算黑名單": "VARCHAR(100)",
-        "參加本基礎課程的原因？": "longtext"
-    }
-    return main_frame_dict
-
-
 class DataConnection:
     def __init__(self, data, config, first_cat, second_cat, date):
         self.config = config
@@ -68,7 +23,7 @@ class DataConnection:
         self.month = date[4:6]
         self.day = data[6:]
         self.command = ""
-        self.column_sql_dict = get_main_frame_dict()
+        self.column_sql_dict = conf.get_main_frame_dict()
         try:
             # Test whether the type is pandas dataframe
             self.data.iloc[0:0] = self.data.iloc[0:0]
@@ -130,7 +85,6 @@ class DataConnection:
                             self.command = self.command + j + " INT)"
                         elif type(self.data.iloc[0, i]) == np_float64:
                             self.command = self.command + j + " INT)"
-
             try:
                 # Execute SQL command
                 conn = pymysql_connect(**self.config)
@@ -141,7 +95,7 @@ class DataConnection:
                 t_sleep(5)
                 sys_exit()
 
-    # depreciated command: since the alter command uses too much resources and may cause the db to crush
+    # depreciated function: since the alter command uses too much resources and may cause the db to crush
     def alter_table(self, table_name, column_command, maintable_column_list):
         print('# 新增新欄位於"主資料表"')
         # create list that is not inside mainframe
@@ -235,7 +189,7 @@ class DataConnection:
                     command += str(j)
             command += ") VALUES ("
             for i, j in enumerate(column_command):
-                int_list = ["學位學分", "訓練總時數", "數位時數", "實體時數", "年度", "學期", "CARDO點數"]
+                int_list = conf.get_db_number_list()
                 if i != (len(column_command) - 1):
                     if j in int_list:
                         command += str(values_command[i]) + ", "
