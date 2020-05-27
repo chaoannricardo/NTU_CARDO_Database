@@ -137,7 +137,7 @@ class DataConnection:
                 cursor_object = conn.cursor()
                 cursor_object.execute(self.command)
             except pymysql.err.DataError:
-                print("# 有欄位內容字元超出資料庫預設限制，請聯絡程式管理員")
+                print("# 設計外錯誤發生，請聯絡程式管理員（database_management: create_table）")
                 t_sleep(5)
                 sys_exit()
 
@@ -152,7 +152,7 @@ class DataConnection:
         alter_command = "ALTER TABLE " + table_name + "\nADD COLUMN "
         try:
             for i, j in enumerate(columns_not_in_mainframe):
-                if i != (len(column_command) - 1):
+                if i != (len(columns_not_in_mainframe) - 1):
                     if type(self.data.loc[0, str(j)]) == str:
                         alter_command = alter_command + j + " VARCHAR(100), "
                     elif type(self.data.loc[0, str(j)]) == np_int64:

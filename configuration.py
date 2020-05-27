@@ -1,6 +1,5 @@
 from pymysql import cursors
 from os import system as os_system
-from time import sleep as t_sleep
 import database_management
 
 
