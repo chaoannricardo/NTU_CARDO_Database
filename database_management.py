@@ -141,61 +141,61 @@ class DataConnection:
                 t_sleep(5)
                 sys_exit()
 
-    # # depreciated command: since the alter command uses too much resources and may cause the db to crush
-    # def alter_table(self, table_name, column_command, maintable_column_list):
-    #     print('# 新增新欄位於"主資料表"')
-    #     # create list that is not inside mainframe
-    #     columns_not_in_mainframe = []
-    #     for i, j in enumerate(column_command):
-    #         if j not in maintable_column_list:
-    #             columns_not_in_mainframe.append(j)
-    #
-    #     # alter maintable by adding columns not inside main table
-    #     alter_command = "ALTER TABLE " + table_name + "\nADD COLUMN "
-    #     try:
-    #         for i, j in enumerate(columns_not_in_mainframe):
-    #             if i != (len(columns_not_in_mainframe) - 1):
-    #                 if type(self.data.loc[0, str(j)]) == str:
-    #                     alter_command = alter_command + j + " VARCHAR(100), "
-    #                 elif type(self.data.loc[0, str(j)]) == np_int64:
-    #                     alter_command = alter_command + j + " INT, "
-    #                 elif type(self.data.loc[0, str(j)]) == np_float64:
-    #                     alter_command = alter_command + j + " INT, "
-    #             else:
-    #                 if type(self.data.loc[0, str(j)]) == str:
-    #                     alter_command = alter_command + j + " VARCHAR(100)"
-    #                 elif type(self.data.loc[0, str(j)]) == np_int64:
-    #                     alter_command = alter_command + j + " INT"
-    #                 elif type(self.data.loc[0, str(j)]) == np_float64:
-    #                     alter_command = alter_command + j + " INT"
-    #
-    #         # execute alter command
-    #         conn = pymysql_connect(**self.config)
-    #         cursor_object = conn.cursor()
-    #         cursor_object.execute(alter_command)
-    #         print("alter table finished")
-    #
-    #     except pymysql.err.DataError:
-    #         for i, j in enumerate(columns_not_in_mainframe):
-    #             if i != (len(columns_not_in_mainframe) - 1):
-    #                 if type(self.data.loc[0, str(j)]) == str:
-    #                     alter_command = alter_command + j + " longtext, "
-    #                 elif type(self.data.loc[0, str(j)]) == np_int64:
-    #                     alter_command = alter_command + j + " INT, "
-    #                 elif type(self.data.loc[0, str(j)]) == np_float64:
-    #                     alter_command = alter_command + j + " INT, "
-    #             else:
-    #                 if type(self.data.loc[0, str(j)]) == str:
-    #                     alter_command = alter_command + j + " longtext"
-    #                 elif type(self.data.loc[0, str(j)]) == np_int64:
-    #                     alter_command = alter_command + j + " INT"
-    #                 elif type(self.data.loc[0, str(j)]) == np_float64:
-    #                     alter_command = alter_command + j + " INT"
-    #
-    #         # execute alter command
-    #         conn = pymysql_connect(**self.config)
-    #         cursor_object = conn.cursor()
-    #         cursor_object.execute(alter_command)
+    # depreciated command: since the alter command uses too much resources and may cause the db to crush
+    def alter_table(self, table_name, column_command, maintable_column_list):
+        print('# 新增新欄位於"主資料表"')
+        # create list that is not inside mainframe
+        columns_not_in_mainframe = []
+        for i, j in enumerate(column_command):
+            if j not in maintable_column_list:
+                columns_not_in_mainframe.append(j)
+
+        # alter maintable by adding columns not inside main table
+        alter_command = "ALTER TABLE " + table_name + "\nADD COLUMN "
+        try:
+            for i, j in enumerate(columns_not_in_mainframe):
+                if i != (len(columns_not_in_mainframe) - 1):
+                    if type(self.data.loc[0, str(j)]) == str:
+                        alter_command = alter_command + j + " VARCHAR(100), "
+                    elif type(self.data.loc[0, str(j)]) == np_int64:
+                        alter_command = alter_command + j + " INT, "
+                    elif type(self.data.loc[0, str(j)]) == np_float64:
+                        alter_command = alter_command + j + " INT, "
+                else:
+                    if type(self.data.loc[0, str(j)]) == str:
+                        alter_command = alter_command + j + " VARCHAR(100)"
+                    elif type(self.data.loc[0, str(j)]) == np_int64:
+                        alter_command = alter_command + j + " INT"
+                    elif type(self.data.loc[0, str(j)]) == np_float64:
+                        alter_command = alter_command + j + " INT"
+
+            # execute alter command
+            conn = pymysql_connect(**self.config)
+            cursor_object = conn.cursor()
+            cursor_object.execute(alter_command)
+            print("alter table finished")
+
+        except pymysql.err.DataError:
+            for i, j in enumerate(columns_not_in_mainframe):
+                if i != (len(columns_not_in_mainframe) - 1):
+                    if type(self.data.loc[0, str(j)]) == str:
+                        alter_command = alter_command + j + " longtext, "
+                    elif type(self.data.loc[0, str(j)]) == np_int64:
+                        alter_command = alter_command + j + " INT, "
+                    elif type(self.data.loc[0, str(j)]) == np_float64:
+                        alter_command = alter_command + j + " INT, "
+                else:
+                    if type(self.data.loc[0, str(j)]) == str:
+                        alter_command = alter_command + j + " longtext"
+                    elif type(self.data.loc[0, str(j)]) == np_int64:
+                        alter_command = alter_command + j + " INT"
+                    elif type(self.data.loc[0, str(j)]) == np_float64:
+                        alter_command = alter_command + j + " INT"
+
+            # execute alter command
+            conn = pymysql_connect(**self.config)
+            cursor_object = conn.cursor()
+            cursor_object.execute(alter_command)
 
     # Insert csv into separate table
     def insert_table(self, table_name):
@@ -208,9 +208,10 @@ class DataConnection:
         for a in range(len(self.data)):
             column_command = []
             values_command = []
+
+            # initiate the columns that we would like to insert
             for i, j in enumerate(self.data.columns):
                 column_command.append(self.data.columns[i])
-                values_command.append(self.data.iloc[a, i])
 
             # check if all insert columns are inside main table
             if all(item in maintable_column_list for item in column_command):
@@ -220,6 +221,10 @@ class DataConnection:
                 for i, j in enumerate(column_command):
                     if j not in maintable_column_list:
                         column_command.remove(j)
+
+            # revise and append value that we would like to insert
+            for i, j in enumerate(column_command):
+                values_command.append(self.data.loc[a, j])
 
             # create the command
             command = "INSERT INTO " + table_name + " ("
