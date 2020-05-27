@@ -1,10 +1,9 @@
+# -*- coding: utf8 -*-
 from pymysql import cursors
-from os import system as os_system
+from sys import exit as sys_exit
+from time import sleep as t_sleep
 import database_management
-
-
-def clear_console():
-    os_system("clear")
+import pymysql
 
 
 def print_licence():
@@ -13,7 +12,7 @@ def print_licence():
            "E-mail: richiechao95@gmail.com\n" + \
            "Linkedin: https://www.linkedin.com/in/chaoannricardo/\n" + \
            "本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database\n" + \
-           "Version: 2.0 Beta; Last Modified Date: 2020/05/11\n" + \
+           "Version: 2.0 Beta; Last Modified Date: 2020/05/27\n" + \
            "程式導覽手冊：https://github.com/chaoannricardo/NTU_CARDO_Database/blob/master/GUIDE.md\n" + \
            "----------------------------------------------------------------------------------"
     print(text)
@@ -40,15 +39,13 @@ def auto_log_in():
     password = 'ntucardo'
     print("----------------------------------------------------------------------------------")
     print("【國立臺灣大學管理學院生涯發展中心（CARDO）資料處理及資料庫管理程式】")
-    license = print_licence()
+    print_licence()
     print("# 歡迎使用本資料庫系統")
     config = get_config(account, password)
     # 身分驗證
     print('# 登入中....')
     conn = database_management.pymysql_connect(**config)
-    print("# 登入成功，歡迎回來", account)
-    print()
-    print()
+    print("# 登入成功，歡迎回來", account, '\n\n')
     return config
 
 
@@ -106,4 +103,36 @@ def get_db_number_list():
                    "學期",
                    "CARDO點數"]
     return number_list
+
+
+# depreciated, use auto_login() instead
+def log_in():
+    while True:
+        print("----------------------------------------------------------------------------------")
+        print("【國立臺灣大學管理學院生涯發展中心（CARDO）資料處理及資料庫管理程式】")
+        print_licence()
+        print("# 歡迎使用本資料庫系統")
+        account = input("# 請輸入使用者帳號，或輸入'exit'離開本程式： ")
+        if account == "exit":
+            print("# 謝謝您的使用，歡迎下次光臨。")
+            t_sleep(1)
+            sys_exit(0)  # terminate program if input exit
+        else:
+            # enter password
+            password = input("# 請輸入使用者密碼： ")
+            try:
+                config = get_config(account, password)
+                # 身分驗證
+                print('# 登入中....')
+                database_management.pymysql_connect(**config)
+                print("# 登入成功，歡迎回來", account, '\n\n')
+                t_sleep(1)
+                break
+            except pymysql.err.OperationalError:
+                print("# 您輸入的帳號或密碼錯誤，請再輸入一次。\n\n")
+    return config
+
+
+if __name__ == '__main__':
+    log_in()
 
