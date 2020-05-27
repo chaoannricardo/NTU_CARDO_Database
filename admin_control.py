@@ -66,4 +66,5 @@ def admin_control():
         file_management.remove_temp()
 
 
-
+if __name__ == '__main__':
+    admin_control()
