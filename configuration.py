@@ -146,4 +146,4 @@ if __name__ == '__main__':
     column_df = pd_DataFrame({
         '欄位名': list(configuration_dict.keys()),
     })
-    column_df.to_csv('./column_list.csv', sep=',', index=False)
+    column_df.to_csv('./column_list.csv', sep=',', index=False, encoding='Big5')
