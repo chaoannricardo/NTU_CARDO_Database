@@ -1,14 +1,12 @@
 # -*- coding: utf8 -*-
 # import packages needed
 from os import listdir as os_listdir
-from pymysql import cursors
 from pandas import read_csv as pd_read_csv
 from sys import exit as sys_exit
 from time import sleep as t_sleep
+from models import data_processing, database_management, file_management
 import configuration as conf
-import data_processing
-import database_management
-import file_management
+
 
 
 def get_information(command):
@@ -111,10 +109,10 @@ if __name__ == '__main__':
             file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
             file_source.get_file()
             data_source = data_processing.Data(file_source.year,
-                                              file_source.semester,
-                                              file_source.file_path,
-                                              file_source.first_cat,
-                                              file_source.second_cat)
+                                               file_source.semester,
+                                               file_source.file_path,
+                                               file_source.first_cat,
+                                               file_source.second_cat)
             data, produced_df_path = data_source.data_processing()
             file_management.remove_temp()
             print('# 成功生成CSV')
@@ -153,10 +151,10 @@ if __name__ == '__main__':
             file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
             file_source.get_file()
             data_source = data_processing.Data(file_source.year,
-                                              file_source.semester,
-                                              file_source.file_path,
-                                              file_source.first_cat,
-                                              file_source.second_cat)
+                                               file_source.semester,
+                                               file_source.file_path,
+                                               file_source.first_cat,
+                                               file_source.second_cat)
             data, produced_df_path = data_source.data_processing()
             file_management.remove_temp()
             print('# 成功生成CSV')

@@ -2,7 +2,7 @@
 from pymysql import cursors
 from sys import exit as sys_exit
 from time import sleep as t_sleep
-import database_management
+from models import database_management
 import pymysql
 
 

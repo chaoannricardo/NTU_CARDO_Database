@@ -1,6 +1,5 @@
 from tkinter import *
-from time import sleep as t_sleep
-import database_management
+from models import database_management
 import tkinter.font as tkFont
 
 

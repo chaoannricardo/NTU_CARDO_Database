@@ -2,9 +2,7 @@
 from pandas import read_csv as pd_read_csv
 from time import sleep as t_sleep
 import configuration as conf
-import database_management
-import data_processing
-import file_management
+from models import data_processing, database_management, file_management
 import pymysql
 import __init__
 
@@ -38,10 +36,10 @@ def admin_control():
         file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
         file_source.get_file()
         data_source = data_processing.Data(file_source.year,
-                                          file_source.semester,
-                                          file_source.file_path,
-                                          file_source.first_cat,
-                                          file_source.second_cat)
+                                           file_source.semester,
+                                           file_source.file_path,
+                                           file_source.first_cat,
+                                           file_source.second_cat)
         data, produced_df_path = data_source.data_processing()
         file_management.remove_temp()
         print('# 成功生成CSV')
