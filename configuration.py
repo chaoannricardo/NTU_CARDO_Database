@@ -144,6 +144,6 @@ def log_in():
 if __name__ == '__main__':
     configuration_dict = get_main_frame_dict()
     column_df = pd_DataFrame({
-        '欄位名': list(configuration_dict.keys()),
+        '欄位名': ['# 此為主資料表裡有的欄位名稱，\n如想新增不同的欄位，請洽程式維護者'] + list(configuration_dict.keys()),
     })
-    column_df.to_csv('./column_list.csv', sep=',', index=False, encoding='Big5')
+    column_df.to_csv('./column_list.csv', sep=',', index=False, encoding='big5')
