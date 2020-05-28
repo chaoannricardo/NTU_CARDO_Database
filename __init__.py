@@ -8,7 +8,6 @@ from models import data_processing, database_management, file_management
 import configuration as conf
 
 
-
 def get_information(command):
     # print out different messages depends on the input commands
     if command == "10":

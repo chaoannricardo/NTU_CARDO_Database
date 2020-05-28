@@ -80,7 +80,6 @@ def get_main_frame_dict():
         "訓練總數單位": "VARCHAR(100)",
         "數位時數": "INT",
         "實體時數": "INT",
-        "是否有實習過？": "VARCHAR(100)",
         "年度": "INT",
         "學期": "INT",
         "年度學期": "VARCHAR(100)",
@@ -89,7 +88,15 @@ def get_main_frame_dict():
         "報名方式": "VARCHAR(100)",
         "CARDO點數": "INT",
         "是否計算黑名單": "VARCHAR(100)",
-        "參加本基礎課程的原因？": "longtext"
+        # 以下為常見問答問題，記得標點符號等所有字符都必須一樣，否則將會被視為不同欄位
+        "參加本基礎課程的原因？": "longtext",
+        "申請動機": "longtext",
+        "描述我的個人特質": "longtext",
+        "是否有實習過？": "VARCHAR(100)",
+        "使用U Meeting或現場參加": "longtext",
+        "想問主講者的問題": "longtext",
+        "想問主講者的問題？": "longtext",
+        "想問學長姊的問題？": "longtext"
     }
     return main_frame_dict
 
