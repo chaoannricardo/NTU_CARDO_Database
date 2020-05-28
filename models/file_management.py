@@ -32,7 +32,7 @@ class File:
             temp_data = open("./temp_data.csv", mode="w+")
             for index, line in enumerate(file):
                 if index == 0:
-                    activity_name = line.split(",")[0]
+                    activity_name = max(line.split(","), key=len)
                     print("# 目前處理", activity_name, sep="")
                 else:
                     temp_data.write(line)
