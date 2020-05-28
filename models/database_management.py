@@ -72,6 +72,17 @@ class DataConnection:
                         # This part ensure that if you are creating main table,
                         # we would add all possible columns as our schema
                         else:
+                            # append last column inside the data first
+                            if j in self.column_sql_dict:
+                                self.command = self.command + "`" + j + "` " + self.column_sql_dict[j] + ", "
+                            else:
+                                if type(self.data.iloc[0, i]) == str:
+                                    self.command = self.command + "`" + j + "` VARCHAR(100), "
+                                elif type(self.data.iloc[0, i]) == np_int64:
+                                    self.command = self.command + "`" + j + "` INT, "
+                                elif type(self.data.iloc[0, i]) == np_float64:
+                                    self.command = self.command + "`" + j + "` INT, "
+                            # then, append remain columns of main table
                             columns_needed_to_be_added = []
                             for a, b in enumerate(maintable_column_list):
                                 if b not in self.data.columns:
@@ -81,8 +92,6 @@ class DataConnection:
                                     self.command = self.command + "`" + b + "` " + self.column_sql_dict[b] + ", "
                                 else:
                                     self.command = self.command + "`" + b + "` " + self.column_sql_dict[b] + ")"
-
-            print(self.command)
             # Execute SQL command
             conn = pymysql_connect(**self.config)
             cursor_object = conn.cursor()
@@ -167,7 +176,7 @@ class DataConnection:
                         command += "'" + str(values_command[i]) + "', "
                 else:
                     if j in int_list:
-                        command += str(values_command[i])
+                        command += str(values_command[i]) + "');"
                     else:
                         command += "'" + str(values_command[i]) + "');"
 
