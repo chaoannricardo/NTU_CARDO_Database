@@ -10,7 +10,7 @@ import __init__
 def admin_control():
     print("【管理員模式】")
     print("0. 產生主表（本功能將需要一'已登錄出席'之出席統計表，）")
-    command = input("# 請輸入您所需要的功能，或輸入'exit'返回主選單")
+    command = input("# 請輸入您所需要的功能，或輸入'exit'返回主選單：  ")
     if command == 'exit':
         print("# 返回主選單")
         t_sleep(1)
