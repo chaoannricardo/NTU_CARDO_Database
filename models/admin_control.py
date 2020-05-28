@@ -56,7 +56,7 @@ def admin_control():
         # insert data into mysql table
         db_connection.insert_table(db_connection.table_name)
         # create main table in mysql database
-        db_connection.create_table("主資料表")
+        db_connection.create_table("主資料表", isMainTable=True)
         # insert data into main mysql table
         db_connection.insert_table("主資料表")
         print("# 資料輸入資料庫成功，返回主選單")

@@ -31,34 +31,58 @@ class DataConnection:
             print("# System error occurred within DatabaseManagement.py (data type incorrect.)")
 
     # Produce create command
-    def create_table(self, table_name):
+    def create_table(self, table_name, isMainTable=False):
         self.command = "CREATE TABLE " + str(table_name) + " ("
         try:
+            maintable_column_list = list(conf.get_main_frame_dict().keys())
             for i, j in enumerate(self.data.columns):
                 if (i + 1) != len(self.data.columns):
                     if j in self.column_sql_dict:
-                        self.command = self.command + j + " " + self.column_sql_dict[j] + ", "
+                        self.command = self.command + "`" + j + "` " + self.column_sql_dict[j] + ", "
                     else:
                         if type(self.data.iloc[0, i]) == str:
-                            self.command = self.command + j + " VARCHAR(100), "
+                            self.command = self.command + "`" + j + "` VARCHAR(100), "
                         elif type(self.data.iloc[0, i]) == np_int64:
-                            self.command = self.command + j + " INT, "
+                            self.command = self.command + "`" + j + "` INT, "
                         elif type(self.data.iloc[0, i]) == np_float64:
-                            self.command = self.command + j + " INT, "
-                        else:
-                            print("Type not found.")
+                            self.command = self.command + "`" + j + "` INT, "
                 else:
-                    if j in self.column_sql_dict:
-                        self.command = self.command + j + " " + self.column_sql_dict[j] + ")"
-                    else:
-                        if type(self.data.iloc[0, i]) == str:
-                            self.command = self.command + j + " VARCHAR(100))"
-                        elif type(self.data.iloc[0, i]) == np_int64:
-                            self.command = self.command + j + " INT)"
-                        elif type(self.data.iloc[0, i]) == np_float64:
-                            self.command = self.command + j + " INT)"
+                    if not isMainTable:
+                        # last column of not creating main table
+                        if j in self.column_sql_dict:
+                            self.command = self.command + "`" + j + "` " + self.column_sql_dict[j] + ")"
                         else:
-                            print("Type not found.")
+                            if type(self.data.iloc[0, i]) == str:
+                                self.command = self.command + "`" + j + "` VARCHAR(100))"
+                            elif type(self.data.iloc[0, i]) == np_int64:
+                                self.command = self.command + "`" + j + "` INT)"
+                            elif type(self.data.iloc[0, i]) == np_float64:
+                                self.command = self.command + "`" + j + "` INT)"
+                    else:
+                        if all(item in self.data.columns for item in maintable_column_list):
+                            if j in self.column_sql_dict:
+                                self.command = self.command + "`" + j + "` " + self.column_sql_dict[j] + ")"
+                            else:
+                                if type(self.data.iloc[0, i]) == str:
+                                    self.command = self.command + "`" + j + "` VARCHAR(100))"
+                                elif type(self.data.iloc[0, i]) == np_int64:
+                                    self.command = self.command + "`" + j + "` INT)"
+                                elif type(self.data.iloc[0, i]) == np_float64:
+                                    self.command = self.command + "`" + j + "` INT)"
+                        # This part ensure that if you are creating main table,
+                        # we would add all possible columns as our schema
+                        else:
+                            columns_needed_to_be_added = []
+                            for a, b in enumerate(maintable_column_list):
+                                if b not in self.data.columns:
+                                    columns_needed_to_be_added.append(b)
+                            for a, b in enumerate(columns_needed_to_be_added):
+                                if (a + 1) != len(columns_needed_to_be_added):
+                                    self.command = self.command + "`" + b + "` " + self.column_sql_dict[b] + ", "
+                                else:
+                                    self.command = self.command + "`" + b + "` " + self.column_sql_dict[b] + ")"
+
+            print(self.command)
             # Execute SQL command
             conn = pymysql_connect(**self.config)
             cursor_object = conn.cursor()
@@ -67,24 +91,24 @@ class DataConnection:
             for i, j in enumerate(self.data.columns):
                 if (i + 1) != len(self.data.columns):
                     if j in self.column_sql_dict:
-                        self.command = self.command + j + " " + self.column_sql_dict[j] + ", "
+                        self.command = self.command + "`" + j + "` " + self.column_sql_dict[j] + ", "
                     else:
                         if type(self.data.iloc[0, i]) == str:
-                            self.command = self.command + j + " longtext, "
+                            self.command = self.command + "`" + j + "` longtext, "
                         elif type(self.data.iloc[0, i]) == np_int64:
-                            self.command = self.command + j + " INT, "
+                            self.command = self.command + "`" + j + "` INT, "
                         elif type(self.data.iloc[0, i]) == np_float64:
-                            self.command = self.command + j + " INT, "
+                            self.command = self.command + "`" + j + "` INT, "
                 else:
                     if j in self.column_sql_dict:
-                        self.command = self.command + j + " " + self.column_sql_dict[j] + ")"
+                        self.command = self.command + j + "` " + self.column_sql_dict[j] + ")"
                     else:
                         if type(self.data.iloc[0, i]) == str:
-                            self.command = self.command + j + " longtext"
+                            self.command = self.command + "`" + j + "` longtext"
                         elif type(self.data.iloc[0, i]) == np_int64:
-                            self.command = self.command + j + " INT)"
+                            self.command = self.command + "`" + j + "` INT)"
                         elif type(self.data.iloc[0, i]) == np_float64:
-                            self.command = self.command + j + " INT)"
+                            self.command = self.command + "`" + j + "` INT)"
             try:
                 # Execute SQL command
                 conn = pymysql_connect(**self.config)
@@ -95,7 +119,71 @@ class DataConnection:
                 t_sleep(5)
                 sys_exit()
 
-    # depreciated function: since the alter command uses too much resources and may cause the db to crush
+    # Insert csv into separate table
+    def insert_table(self, table_name):
+        # create list of columns of mainframe
+        conn = pymysql_connect(**self.config)
+        show_column_command = "SHOW COLUMNS FROM " + table_name
+        data = pd_read_sql(show_column_command, conn)
+        maintable_column_list = data.iloc[:, 0].tolist()
+
+        for a in range(len(self.data)):
+            column_command = []
+            values_command = []
+
+            # initiate the columns that we would like to insert
+            for i, j in enumerate(self.data.columns):
+                column_command.append(self.data.columns[i])
+
+            # check if all insert columns are inside main table
+            if all(item in maintable_column_list for item in column_command):
+                pass
+            else:
+                # drop the columns that is not inside main table
+                for i, j in enumerate(column_command):
+                    if j not in maintable_column_list:
+                        print('# 欄位：', j, '不在被輸入表格內（通常是"主資料表"），因此將不會被輸入，\n' \
+                                          '如果有需要輸入該值，請洽程式設計者')
+                        column_command.remove(j)
+
+            # revise and append value that we would like to insert
+            for i, j in enumerate(column_command):
+                values_command.append(self.data.loc[a, j])
+
+            # create the command
+            command = "INSERT INTO " + table_name + " ("
+            for i, j in enumerate(column_command):
+                if i != (len(column_command) - 1):
+                    command += "`" + str(j) + "`, "
+                else:
+                    command += "`" + str(j) + "`"
+            command += ") VALUES ("
+            for i, j in enumerate(column_command):
+                int_list = conf.get_db_number_list()
+                if i != (len(column_command) - 1):
+                    if j in int_list:
+                        command += str(values_command[i]) + ", "
+                    else:
+                        command += "'" + str(values_command[i]) + "', "
+                else:
+                    if j in int_list:
+                        command += str(values_command[i])
+                    else:
+                        command += "'" + str(values_command[i]) + "');"
+
+            conn = pymysql_connect(**self.config)
+            cursor_object = conn.cursor()
+
+            # Execute SQL command
+            try:
+                cursor_object.execute(command)
+                conn.commit()
+            except pymysql.err.DataError:
+                t_sleep(5)
+                print("# 設計外錯誤發生，請聯絡程式管理員（database_management: insert_table）")
+                sys_exit()
+
+    # Depreciated: since the alter command uses too much resources and may cause the db to crush
     def alter_table(self, table_name, column_command, maintable_column_list):
         print('# 新增新欄位於"主資料表"')
         # create list that is not inside mainframe
@@ -150,70 +238,6 @@ class DataConnection:
             conn = pymysql_connect(**self.config)
             cursor_object = conn.cursor()
             cursor_object.execute(alter_command)
-
-    # Insert csv into separate table
-    def insert_table(self, table_name):
-        # create list of columns of mainframe
-        conn = pymysql_connect(**self.config)
-        show_column_command = "SHOW COLUMNS FROM " + table_name
-        data = pd_read_sql(show_column_command, conn)
-        maintable_column_list = data.iloc[:, 0].tolist()
-
-        for a in range(len(self.data)):
-            column_command = []
-            values_command = []
-
-            # initiate the columns that we would like to insert
-            for i, j in enumerate(self.data.columns):
-                column_command.append(self.data.columns[i])
-
-            # check if all insert columns are inside main table
-            if all(item in maintable_column_list for item in column_command):
-                pass
-            else:
-                # drop the columns that is not inside main table
-                for i, j in enumerate(column_command):
-                    if j not in maintable_column_list:
-                        print('# 欄位：', j, '不在被輸入表格內（通常是"主資料表"），因此將不會被輸入，\n' \
-                                          '如果有需要輸入該值，請洽程式設計者')
-                        column_command.remove(j)
-
-            # revise and append value that we would like to insert
-            for i, j in enumerate(column_command):
-                values_command.append(self.data.loc[a, j])
-
-            # create the command
-            command = "INSERT INTO " + table_name + " ("
-            for i, j in enumerate(column_command):
-                if i != (len(column_command) - 1):
-                    command += str(j) + ", "
-                else:
-                    command += str(j)
-            command += ") VALUES ("
-            for i, j in enumerate(column_command):
-                int_list = conf.get_db_number_list()
-                if i != (len(column_command) - 1):
-                    if j in int_list:
-                        command += str(values_command[i]) + ", "
-                    else:
-                        command += "'" + str(values_command[i]) + "', "
-                else:
-                    if j in int_list:
-                        command += str(values_command[i])
-                    else:
-                        command += "'" + str(values_command[i]) + "');"
-
-            conn = pymysql_connect(**self.config)
-            cursor_object = conn.cursor()
-
-            # Execute SQL command
-            try:
-                cursor_object.execute(command)
-                conn.commit()
-            except pymysql.err.DataError:
-                t_sleep(5)
-                print("# 設計外錯誤發生，請聯絡程式管理員（database_management: insert_table）")
-                sys_exit()
 
 
 class SimpleConnection:
