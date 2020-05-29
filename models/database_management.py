@@ -184,13 +184,15 @@ class DataConnection:
             cursor_object = conn.cursor()
 
             # Execute SQL command
-            try:
-                cursor_object.execute(command)
-                conn.commit()
-            except pymysql.err.DataError:
-                t_sleep(5)
-                print("# 設計外錯誤發生，請聯絡程式管理員（database_management: insert_table）")
-                sys_exit()
+            cursor_object.execute(command)
+            conn.commit()
+            # try:
+            #     cursor_object.execute(command)
+            #     conn.commit()
+            # except pymysql.err.DataError:
+            #     t_sleep(5)
+            #     print("# 設計外錯誤發生，請聯絡程式管理員（database_management: insert_table）")
+            #     sys_exit()
 
     # Depreciated: since the alter command uses too much resources and may cause the db to crush
     def alter_table(self, table_name, column_command, maintable_column_list):

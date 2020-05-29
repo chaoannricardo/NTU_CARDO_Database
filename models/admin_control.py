@@ -9,7 +9,7 @@ import __init__
 
 def admin_control():
     print("【管理員模式】")
-    print("0. 產生主表（本功能將需要一'已登錄出席'之出席統計表，）")
+    print("0. 產生主表（請使用專用表格）")
     command = input("# 請輸入您所需要的功能，或輸入'exit'返回主選單：  ")
     if command == 'exit':
         print("# 返回主選單")
@@ -49,16 +49,16 @@ def admin_control():
         file_source.get_file()
         # create a temp csv file in utf8 encoding
         data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
-        # set name of the table
+
         db_connection = database_management.DataConnection(data, config, fc, sc, date)
-        # create new table for the data
-        db_connection.create_table(db_connection.table_name)
-        # insert data into mysql table
-        db_connection.insert_table(db_connection.table_name)
         # create main table in mysql database
         db_connection.create_table("主資料表", isMainTable=True)
         # insert data into main mysql table
         db_connection.insert_table("主資料表")
+        # create black list table in mysql database
+        db_connection.create_table("黑名單統計表", isMainTable=True)
+        # insert black list table into main mysql table
+        db_connection.insert_table("黑名單統計表")
         print("# 資料輸入資料庫成功，返回主選單")
         t_sleep(1)
         file_management.remove_temp()
