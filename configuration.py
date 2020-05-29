@@ -69,7 +69,7 @@ def get_main_frame_dict():
         "合格否": "VARCHAR(100)",
         "出席否": "VARCHAR(100)",
         "合格證號": "VARCHAR(100)",
-        "備註": "VARCHAR(100)",
+        "備註": "longtext",
         "網路位址": "VARCHAR(100)",
         "帳號": "VARCHAR(100)",
         "學位學分": "INT",

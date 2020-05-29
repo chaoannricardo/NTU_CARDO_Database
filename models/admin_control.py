@@ -49,7 +49,6 @@ def admin_control():
         file_source.get_file()
         # create a temp csv file in utf8 encoding
         data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
-
         db_connection = database_management.DataConnection(data, config, fc, sc, date)
         # create main table in mysql database
         db_connection.create_table("主資料表", isMainTable=True)

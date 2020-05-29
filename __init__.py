@@ -138,6 +138,7 @@ if __name__ == '__main__':
             db_connection.insert_table(db_connection.table_name)
             # insert data into main mysql table
             db_connection.insert_table("主資料表")
+            db_connection.insert_table("黑名單統計表")
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             file_management.remove_temp()
@@ -175,6 +176,7 @@ if __name__ == '__main__':
             db_connection.insert_table(db_connection.table_name)
             # insert data into main mysql table
             db_connection.insert_table("主資料表")
+            db_connection.insert_table("黑名單統計表")
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             file_management.remove_temp()
