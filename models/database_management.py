@@ -176,9 +176,9 @@ class DataConnection:
                         command += "'" + str(values_command[i]) + "', "
                 else:
                     if j in int_list:
-                        command += str(values_command[i]) + "');"
+                        command += str(values_command[i]) + ");"
                     else:
-                        command += "'" + str(values_command[i]) + "');"
+                        command += "'" + str(values_command[i]) + ");"
 
             conn = pymysql_connect(**self.config)
             cursor_object = conn.cursor()

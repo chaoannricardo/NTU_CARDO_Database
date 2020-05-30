@@ -19,7 +19,6 @@ class Data:
         try:
             df = pd_read_csv("./temp_data.csv", encoding="Big5")
             # fill-up year, semester, year_semester value
-            print(semester_list)
             df.loc[:, '年度'] = semester_list[0]
             df.loc[:, '學期'] = semester_list[1]
             df.loc[:, '年度學期'] = self.semester

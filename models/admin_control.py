@@ -49,18 +49,22 @@ def admin_control():
         file_source.get_file()
         # create a temp csv file in utf8 encoding
         data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
+        # set name of the table
         db_connection = database_management.DataConnection(data, config, fc, sc, date)
-        # create main table in mysql database
-        db_connection.create_table("主資料表", isMainTable=True)
-        # insert data into main mysql table
+        # create new table for the data
+        db_connection.create_table("主資料表")
+        '''
+        To tackle 'The MySQL server is running with the --secure-file-priv option so it cannot execute this statement' error
+        reference: https://blog.csdn.net/fdipzone/article/details/78634992
+        '''
+        # insert data into mysql table
         db_connection.insert_table("主資料表")
-        # create black list table in mysql database
-        db_connection.create_table("黑名單統計表", isMainTable=True)
-        # insert black list table into main mysql table
+        db_connection.create_table("黑名單統計表")
         db_connection.insert_table("黑名單統計表")
         print("# 資料輸入資料庫成功，返回主選單")
         t_sleep(1)
         file_management.remove_temp()
+
 
 
 if __name__ == '__main__':

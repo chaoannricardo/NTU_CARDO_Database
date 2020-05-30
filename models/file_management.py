@@ -25,37 +25,24 @@ class File:
 
     def get_file(self):
         # edit file path to read in the file
-        self.file_path = self.file_path.replace("\\", "/").replace("\"", "")
-        file = open(self.file_path, mode="r", encoding='big5')
-        # Collect title (activity name), and create temp_data for further processing
-        temp_data = open("./temp_data.csv", mode="w+", encoding='big5')
-        for index, line in enumerate(file):
-            if index == 0:
-                activity_name = max(line.split(","), key=len)
-                print("# 目前處理", activity_name, sep="")
-            else:
-                temp_data.write(line)
-        file.close()
-        temp_data.close()
-        print("# 檔案抓取成功，程式繼續")
-        # try:
-        #     self.file_path = self.file_path.replace("\\", "/").replace("\"", "")
-        #     file = open(self.file_path, mode="r")
-        #     # Collect title (activity name), and create temp_data for further processing
-        #     temp_data = open("./temp_data.csv", mode="w+")
-        #     for index, line in enumerate(file):
-        #         if index == 0:
-        #             activity_name = max(line.split(","), key=len)
-        #             print("# 目前處理", activity_name, sep="")
-        #         else:
-        #             temp_data.write(line)
-        #     file.close()
-        #     temp_data.close()
-        #     print("# 檔案抓取成功，程式繼續")
-        # except:
-        #     print("# 檔案抓取失敗")
-        #     print("# 您所輸入的路徑不正確或不存在，程式終止")
-        #     sys_exit(0)
+        try:
+            self.file_path = self.file_path.replace("\\", "/").replace("\"", "")
+            file = open(self.file_path, mode="r")
+            # Collect title (activity name), and create temp_data for further processing
+            temp_data = open("./temp_data.csv", mode="w+")
+            for index, line in enumerate(file):
+                if index == 0:
+                    activity_name = max(line.split(","), key=len)
+                    print("# 目前處理", activity_name, sep="")
+                else:
+                    temp_data.write(line)
+            file.close()
+            temp_data.close()
+            print("# 檔案抓取成功，程式繼續")
+        except:
+            print("# 檔案抓取失敗")
+            print("# 您所輸入的路徑不正確或不存在，程式終止")
+            sys_exit(0)
 
 
 def remove_temp():
