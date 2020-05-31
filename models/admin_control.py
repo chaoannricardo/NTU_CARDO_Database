@@ -44,11 +44,6 @@ def admin_control():
         file_management.remove_temp()
         print('# 成功生成CSV')
         print('# 開始將生成csv輸入資料庫...')
-        # insert data into database
-        file_source = file_management.File(produced_df_path, sem, semester_first, semester_second, fc, sc, date)
-        file_source.get_file()
-        # create a temp csv file in utf8 encoding
-        data = pd_read_csv(file_source.file_path, encoding="Big5", sep=",")
         # set name of the table
         db_connection = database_management.DataConnection(data, config, fc, sc, date)
         # create new table for the data
