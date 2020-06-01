@@ -31,7 +31,7 @@ class File:
         try:
             # edit file path to read in the file
             self.file_path = self.file_path.replace("\\", "/").replace("\"", "")
-            file = codecs_open(self.file_path, 'r', encoding='big5')
+            file = open(self.file_path, 'r', encoding='big5')
             # Collect title (activity name), and create temp_data for further processing
             temp_data = open("./temp_data.csv", mode="w+", encoding='big5')
             for index, line in enumerate(file):
@@ -66,14 +66,5 @@ def remove_temp():
     # remove temp_data
     try:
         os_remove("./temp_data.csv")
-    except:
+    except Exception as e:
         print("# 在工作目錄找不到暫存檔案")
-
-
-def remove_temp_utf8():
-    # remove temp_data
-    try:
-        os_remove("./temp_data_utf8.csv")
-    except:
-        print("# 在工作目錄找不到暫存檔案")
-

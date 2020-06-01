@@ -154,7 +154,6 @@ if __name__ == '__main__':
                                                file_source.second_cat)
             data, produced_df_path = data_source.data_processing()
             file_management.remove_temp()
-            file_management.remove_temp_utf8()
             print('# 成功生成CSV')
             print('# 開始將生成csv輸入資料庫...')
             # insert data into database
@@ -179,7 +178,7 @@ if __name__ == '__main__':
             # 13. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
             # Produce csv file after processing
             print("此種建檔請按照下列範例檔案命名格式：(用_分隔)")
-            print("200325_108-1_TIP企業實習計劃說明會_藍天電腦.csv  (csv為檔名)")
+            print("20200325_108-1_TIP企業實習計劃說明會_藍天電腦.csv  (csv為檔名)")
             print("# 常用場次為: 1:TCP希望種子培育計畫  2:TIP企業實習計劃說明會  3:職涯講堂  4:職業工坊  5:菁粹會客室")
             path = input(
                 "【注意事項】\n請將從台大網站下載的'xls'檔案，以Excel開啟後，以'CSV (逗號分隔) (*.csv)'方式另存新檔)\n請輸入另存新檔後csv路徑(Shift+滑鼠右鍵 => 複製路徑): ")
@@ -198,6 +197,7 @@ if __name__ == '__main__':
             sc_list = name_list[3].split(".csv")
             sc = sc_list[0]
 
+            # normal data processing method
             file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
             file_source.get_file()
             data_source = data_processing.Data(file_source.year,
@@ -206,8 +206,7 @@ if __name__ == '__main__':
                                                file_source.first_cat,
                                                file_source.second_cat)
             data, produced_df_path = data_source.data_processing()
-            file_management.remove_temp()
-            file_management.remove_temp_utf8()
+            # file_management.remove_temp()
             print('# 成功生成CSV')
             print('# 開始將生成csv輸入資料庫...')
             # insert data into database
@@ -227,7 +226,6 @@ if __name__ == '__main__':
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             file_management.remove_temp()
-
 
         elif command == "20":
             # 20. 【黑名單管理】計算黑名單
