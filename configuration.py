@@ -22,9 +22,20 @@ def print_licence():
 
 def get_config(account, password):
     config = {
-        # 'host': '127.0.0.1',
-        # 'host': '220.133.208.39',
         'host': '10.181.2.122',
+        'port': 3306,
+        'user': account,
+        'password': password,
+        'db': 'cardo',
+        'charset': 'utf8mb4',
+        'cursorclass': cursors.DictCursor,
+    }
+    return config
+
+
+def get_config_develop(account, password):
+    config = {
+        'host': '220.133.208.39',
         'port': 3306,
         'user': account,
         'password': password,
@@ -42,10 +53,16 @@ def auto_log_in():
     print("【國立臺灣大學管理學院生涯發展中心（CARDO）資料處理及資料庫管理程式】")
     print_licence()
     print("# 歡迎使用本資料庫系統")
-    config = get_config(account, password)
-    # 身分驗證
-    print('# 登入中....')
-    conn = database_management.pymysql_connect(**config)
+    try:
+        config = get_config(account, password)
+        # 身分驗證
+        print('# 登入中....')
+        conn = database_management.pymysql_connect(**config)
+    except: # for development 
+        config = get_config_develop(account, password)
+        # 身分驗證
+        print('# 登入中....')
+        conn = database_management.pymysql_connect(**config)
     print("# 登入成功，歡迎回來", account, '\n\n')
     return config
 

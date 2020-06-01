@@ -32,7 +32,7 @@ class DataConnection:
 
     # Produce create command
     def create_table(self, table_name, isMainTable=False):
-        self.command = "CREATE TABLE " + str(table_name) + " ("
+        self.command = "CREATE TABLE `" + str(table_name) + "` ("
         try:
             maintable_column_list = list(conf.get_main_frame_dict().keys())
             for i, j in enumerate(self.data.columns):
@@ -132,7 +132,7 @@ class DataConnection:
     def insert_table(self, table_name):
         # create list of columns of mainframe
         conn = pymysql_connect(**self.config)
-        show_column_command = "SHOW COLUMNS FROM " + table_name
+        show_column_command = "SHOW COLUMNS FROM `" + table_name + "`"
         data = pd_read_sql(show_column_command, conn)
         maintable_column_list = data.iloc[:, 0].tolist()
 
@@ -160,7 +160,7 @@ class DataConnection:
                 values_command.append(self.data.loc[a, j])
 
             # create the command
-            command = "INSERT INTO " + table_name + " ("
+            command = "INSERT INTO `" + table_name + "` ("
             for i, j in enumerate(column_command):
                 if i != (len(column_command) - 1):
                     command += "`" + str(j) + "`, "
