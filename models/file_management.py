@@ -1,5 +1,8 @@
 from os import remove as os_remove
 from sys import exit as sys_exit
+from codecs import open as codecs_open
+import sys
+import traceback
 
 
 class File:
@@ -24,12 +27,13 @@ class File:
             self.first_cat = "菁粹會客室"
 
     def get_file(self):
-        # edit file path to read in the file
+
         try:
+            # edit file path to read in the file
             self.file_path = self.file_path.replace("\\", "/").replace("\"", "")
-            file = open(self.file_path, mode="r")
+            file = codecs_open(self.file_path, 'r', encoding='big5')
             # Collect title (activity name), and create temp_data for further processing
-            temp_data = open("./temp_data.csv", mode="w+")
+            temp_data = open("./temp_data.csv", mode="w+", encoding='big5')
             for index, line in enumerate(file):
                 if index == 0:
                     activity_name = max(line.split(","), key=len)
@@ -39,9 +43,22 @@ class File:
             file.close()
             temp_data.close()
             print("# 檔案抓取成功，程式繼續")
-        except:
+        except Exception as e:
             print("# 檔案抓取失敗")
             print("# 您所輸入的路徑不正確或不存在，程式終止")
+
+            # print out error message when error occurs
+            # https://dotblogs.com.tw/caubekimo/2018/09/17/145733
+            error_class = e.__class__.__name__  # 取得錯誤類型
+            detail = e.args[0]  # 取得詳細內容
+            cl, exc, tb = sys.exc_info()  # 取得Call Stack
+            lastCallStack = traceback.extract_tb(tb)[-1]  # 取得Call Stack的最後一筆資料
+            fileName = lastCallStack[0]  # 取得發生的檔案名稱
+            lineNum = lastCallStack[1]  # 取得發生的行號
+            funcName = lastCallStack[2]  # 取得發生的函數名稱
+            errMsg = "File \"{}\", line {}, in {}: [{}] {}".format(fileName, lineNum, funcName, error_class, detail)
+            print(errMsg)
+
             sys_exit(0)
 
 
@@ -49,6 +66,14 @@ def remove_temp():
     # remove temp_data
     try:
         os_remove("./temp_data.csv")
+    except:
+        print("# 在工作目錄找不到暫存檔案")
+
+
+def remove_temp_utf8():
+    # remove temp_data
+    try:
+        os_remove("./temp_data_utf8.csv")
     except:
         print("# 在工作目錄找不到暫存檔案")
 

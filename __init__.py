@@ -154,6 +154,7 @@ if __name__ == '__main__':
                                                file_source.second_cat)
             data, produced_df_path = data_source.data_processing()
             file_management.remove_temp()
+            file_management.remove_temp_utf8()
             print('# 成功生成CSV')
             print('# 開始將生成csv輸入資料庫...')
             # insert data into database
@@ -206,6 +207,7 @@ if __name__ == '__main__':
                                                file_source.second_cat)
             data, produced_df_path = data_source.data_processing()
             file_management.remove_temp()
+            file_management.remove_temp_utf8()
             print('# 成功生成CSV')
             print('# 開始將生成csv輸入資料庫...')
             # insert data into database
