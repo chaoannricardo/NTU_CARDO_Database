@@ -73,15 +73,13 @@ def get_menu():
     print("# 10. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」（+ 黑名單、CARDO點數、報名方式等)")
     print("# 11. 【活動結束後資料建檔】「計算完成統計表」「輸入資料庫」")
     print("# 12. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」（標準流程）")
+    print("# 13. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」（快速建檔，利用檔名）")
     print()
     print("# 【黑名單管理】(系列功能仍在建置中)")
     print("# 20. 【黑名單管理】計算黑名單")
     print("# 21. 【黑名單管理】黑名單生效")
     print("# 22. 【資料庫查詢】以姓名查詢參加CARDO活動紀錄")
     print()
-    print("【額外功能】")
-    print()
-    print("# 90. 【快速建檔】過去手工歷史「計算完成統計表」「輸入資料庫」")
 
 
 # "C:\Users\ricardo\Storage\Github\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
@@ -93,7 +91,7 @@ if __name__ == '__main__':
         get_menu()
         while True:
             command = input("# 請輸入想要使用的功能代碼： ")
-            if command not in ["0", "10", "11", "12", "20", "21", "22", "90", "admin"]:
+            if command not in ["0", "10", "11", "12", "13", "20", "21", "22", "90", "admin"]:
                 print("# 您輸入的功能代碼不正確，請再輸入一次，或輸入0終止程式")
             else:
                 break
@@ -145,7 +143,6 @@ if __name__ == '__main__':
 
         elif command == "12":
             # 12. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
-            # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
             # Produce csv file after processing
             path, sem, semester_first, semester_second, fc, sc, date = get_information("10")
             file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
@@ -176,6 +173,59 @@ if __name__ == '__main__':
             print("# 資料輸入資料庫成功，返回主選單")
             t_sleep(1)
             file_management.remove_temp()
+
+        elif command == "13":
+            # 13. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
+            # Produce csv file after processing
+            print("此種建檔請按照下列範例檔案命名格式：")
+            print("200325_108-1_TIP_企業實習計劃說明會_藍天電腦.csv  (csv為檔名)")
+            print("# 常用場次為: 1:TCP_希望種子培育計畫  2:TIP_企業實習計劃說明會  3:職涯講堂  4:職業工坊  5:菁粹會客室")
+            path = input(
+                "【注意事項】\n請將從台大網站下載的'xls'檔案，以Excel開啟後，以'CSV (逗號分隔) (*.csv)'方式另存新檔)\n請輸入另存新檔後csv路徑(Shift+滑鼠右鍵 => 複製路徑): ")
+
+            sep_by_backslash = path.split("\\")
+            name_list = sep_by_backslash[-1].split("_")
+            print(name_list)
+            date = name_list[0]
+            sem = name_list[1]
+            # create semester first and second
+            sem_list = sem.split("-")
+            semester_first = sem_list[0]
+            semester_second = sem_list[1]
+            fc = name_list[2]
+            # create sc
+            sc_list = name_list[3].split(".csv")
+            sc = sc_list[0]
+
+            file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
+            file_source.get_file()
+            data_source = data_processing.Data(file_source.year,
+                                               file_source.semester,
+                                               file_source.file_path,
+                                               file_source.first_cat,
+                                               file_source.second_cat)
+            data, produced_df_path = data_source.data_processing()
+            file_management.remove_temp()
+            print('# 成功生成CSV')
+            print('# 開始將生成csv輸入資料庫...')
+            # insert data into database
+            # set name of the table
+            db_connection = database_management.DataConnection(data, config, fc, sc, date)
+            # create new table for the data
+            db_connection.create_table(db_connection.table_name)
+            '''
+            To tackle 'The MySQL server is running with the --secure-file-priv option so it cannot execute this statement' error
+            reference: https://blog.csdn.net/fdipzone/article/details/78634992
+            '''
+            # insert data into mysql table
+            db_connection.insert_table(db_connection.table_name)
+            # insert data into main mysql table
+            db_connection.insert_table("主資料表")
+            db_connection.insert_table("黑名單統計表")
+            print("# 資料輸入資料庫成功，返回主選單")
+            t_sleep(1)
+            file_management.remove_temp()
+
 
         elif command == "20":
             # 20. 【黑名單管理】計算黑名單
