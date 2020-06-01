@@ -31,7 +31,7 @@ class File:
         try:
             # edit file path to read in the file
             self.file_path = self.file_path.replace("\\", "/").replace("\"", "")
-            file = open(self.file_path, 'r', encoding='big5')
+            file = codecs_open(self.file_path, 'r', encoding='big5', errors='ignore')
             # Collect title (activity name), and create temp_data for further processing
             temp_data = open("./temp_data.csv", mode="w+", encoding='big5')
             for index, line in enumerate(file):

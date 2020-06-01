@@ -58,7 +58,7 @@ def auto_log_in():
         # 身分驗證
         print('# 登入中....')
         conn = database_management.pymysql_connect(**config)
-    except: # for development 
+    except: # for development
         config = get_config_develop(account, password)
         # 身分驗證
         print('# 登入中....')
