@@ -157,7 +157,13 @@ class DataConnection:
 
             # revise and append value that we would like to insert
             for i, j in enumerate(column_command):
-                values_command.append(self.data.loc[a, j])
+                # additional cluase to prevent db insert error
+                if len(str(self.data.loc[a, j])) >= 100:
+                    insert_value = str(self.data.loc[a, j])[:100]
+                else:
+                    insert_value = str(self.data.loc[a, j])
+                # values_command.append(self.data.loc[a, j])
+                values_command.append(insert_value)
 
             # create the command
             command = "INSERT INTO `" + table_name + "` ("
