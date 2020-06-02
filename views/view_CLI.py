@@ -4,8 +4,16 @@ from os import listdir as os_listdir
 from pandas import read_csv as pd_read_csv
 from sys import exit as sys_exit
 from time import sleep as t_sleep
-from models import data_processing, database_management, file_management
+
+# import configuration in parent dir
+import os, sys, inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
 import configuration as conf
+# import packages in models
+from models import data_processing, database_management, file_management
+
 
 
 def get_information(command):

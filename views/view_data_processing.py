@@ -6,7 +6,6 @@ import tkinter.font as tkFont
 
 # import configuration in parent dir
 import os, sys, inspect, view_CLI
-
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)

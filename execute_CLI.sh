@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python view_CLI.py
+python ./views/view_CLI.py
