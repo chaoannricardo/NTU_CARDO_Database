@@ -10,10 +10,10 @@ import pymysql
 def print_licence():
     text = "----------------------------------------------------------------------------------\n" + \
            "程式開發者：趙上涵；Ricardo S. Chao\n" + \
-           "E-mail: richiechao95@gmail.com\n" + \
+           "E-mail: chaoannricardo@protonmail.com\n" + \
            "Linkedin: https://www.linkedin.com/in/chaoannricardo/\n" + \
            "本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database\n" + \
-           "Version: 2.0 Beta; Last Modified Date: 2020/05/27\n" + \
+           "Version: 2.0 Beta; Last Modified Date: 2020/06/02\n" + \
            "程式導覽手冊：https://github.com/chaoannricardo/NTU_CARDO_Database/blob/master/GUIDE.md\n" + \
            "----------------------------------------------------------------------------------"
     print(text)
@@ -29,6 +29,7 @@ def get_config(account, password):
         'db': 'cardo',
         'charset': 'utf8mb4',
         'cursorclass': cursors.DictCursor,
+        'connect_timeout': 3
     }
     return config
 

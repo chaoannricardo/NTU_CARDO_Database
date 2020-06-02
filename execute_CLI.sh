@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python __init__.py
+python view_CLI.py

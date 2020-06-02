@@ -65,6 +65,52 @@ def get_information(command):
     return path, sem, semester_first, semester_second, fc, sc, date
 
 
+def quick_insert_db(path):
+    sep_by_backslash = path.split("\\")
+    name_list = sep_by_backslash[-1].split("_")
+    print(name_list)
+    date = name_list[0]
+    sem = name_list[1]
+    # create semester first and second
+    sem_list = sem.split("-")
+    semester_first = sem_list[0]
+    semester_second = sem_list[1]
+    fc = name_list[2]
+    # create sc
+    sc_list = name_list[3].split(".csv")
+    sc = sc_list[0]
+
+    # normal data processing method
+    file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
+    file_source.get_file()
+    data_source = data_processing.Data(file_source.year,
+                                       file_source.semester,
+                                       file_source.file_path,
+                                       file_source.first_cat,
+                                       file_source.second_cat)
+    data, produced_df_path = data_source.data_processing()
+    # file_management.remove_temp()
+    print('# 成功生成CSV')
+    print('# 開始將生成csv輸入資料庫...')
+    # insert data into database
+    # set name of the table
+    db_connection = database_management.DataConnection(data, config, fc, sc, date)
+    # create new table for the data
+    db_connection.create_table(db_connection.table_name)
+    '''
+    To tackle 'The MySQL server is running with the --secure-file-priv option so it cannot execute this statement' error
+    reference: https://blog.csdn.net/fdipzone/article/details/78634992
+    '''
+    # insert data into mysql table
+    db_connection.insert_table(db_connection.table_name)
+    # insert data into main mysql table
+    db_connection.insert_table("主資料表")
+    db_connection.insert_table("黑名單統計表")
+    print("# 資料輸入資料庫成功，返回主選單")
+    t_sleep(1)
+    file_management.remove_temp()
+
+
 def get_menu():
     print("# 功能選單：")
     print("# 0. 【離開】程式結束")
@@ -182,50 +228,7 @@ if __name__ == '__main__':
             print("# 常用場次為: 1:TCP希望種子培育計畫  2:TIP企業實習計劃說明會  3:職涯講堂  4:職業工坊  5:菁粹會客室")
             path = input(
                 "【注意事項】\n請將從台大網站下載的'xls'檔案，以Excel開啟後，以'CSV (逗號分隔) (*.csv)'方式另存新檔)\n請輸入另存新檔後csv路徑(Shift+滑鼠右鍵 => 複製路徑): ")
-
-            sep_by_backslash = path.split("\\")
-            name_list = sep_by_backslash[-1].split("_")
-            print(name_list)
-            date = name_list[0]
-            sem = name_list[1]
-            # create semester first and second
-            sem_list = sem.split("-")
-            semester_first = sem_list[0]
-            semester_second = sem_list[1]
-            fc = name_list[2]
-            # create sc
-            sc_list = name_list[3].split(".csv")
-            sc = sc_list[0]
-
-            # normal data processing method
-            file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
-            file_source.get_file()
-            data_source = data_processing.Data(file_source.year,
-                                               file_source.semester,
-                                               file_source.file_path,
-                                               file_source.first_cat,
-                                               file_source.second_cat)
-            data, produced_df_path = data_source.data_processing()
-            # file_management.remove_temp()
-            print('# 成功生成CSV')
-            print('# 開始將生成csv輸入資料庫...')
-            # insert data into database
-            # set name of the table
-            db_connection = database_management.DataConnection(data, config, fc, sc, date)
-            # create new table for the data
-            db_connection.create_table(db_connection.table_name)
-            '''
-            To tackle 'The MySQL server is running with the --secure-file-priv option so it cannot execute this statement' error
-            reference: https://blog.csdn.net/fdipzone/article/details/78634992
-            '''
-            # insert data into mysql table
-            db_connection.insert_table(db_connection.table_name)
-            # insert data into main mysql table
-            db_connection.insert_table("主資料表")
-            db_connection.insert_table("黑名單統計表")
-            print("# 資料輸入資料庫成功，返回主選單")
-            t_sleep(1)
-            file_management.remove_temp()
+            quick_insert_db(path)
 
         elif command == "20":
             # 20. 【黑名單管理】計算黑名單

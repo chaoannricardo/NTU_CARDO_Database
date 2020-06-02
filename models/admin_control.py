@@ -1,10 +1,9 @@
 # -*- coding: utf8 -*-
-from pandas import read_csv as pd_read_csv
 from time import sleep as t_sleep
 import configuration as conf
 from models import data_processing, database_management, file_management
 import pymysql
-import __init__
+from views import view_CLI
 
 
 def admin_control():
@@ -32,7 +31,7 @@ def admin_control():
         # 12. 【活動結束後資料建檔】「已登記出席統計表」生成「計算完成統計表」並「輸入資料庫」"
         # "C:\Users\ricardo\Desktop\Data\0311_藍天百腦匯報名清單(登陸出席).csv"
         # Produce csv file after processing
-        path, sem, semester_first, semester_second, fc, sc, date = __init__.get_information("10")
+        path, sem, semester_first, semester_second, fc, sc, date = view_CLI.get_information("10")
         file_source = file_management.File(path, sem, semester_first, semester_second, fc, sc, date)
         file_source.get_file()
         data_source = data_processing.Data(file_source.year,
