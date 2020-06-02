@@ -254,23 +254,36 @@ class DataConnection:
 class SimpleConnection:
     def __init__(self, config):
         self.config = config
+        self.command = ""
+        self.file_path = ""
 
     def black_list_search(self):
-        print("# 是否只顯示進入黑名單（>=5）的同學列表？(Y/N)")
+        print("# 是否只顯示進入黑名單（>=5）的同學列表？(Y/N)\n或可輸入整數以顯示黑名單次數高於輸入值的名單")
         yes_no = input("# 輸入N則會顯示所有同學目前的黑名單技術，並以降冪排序： ")
         yes_no_list = ["Y", "y", "N", "n"]
+        isNumber = False
+        try:
+            yes_no = int(yes_no)
+            isNumber = True
+        except ValueError:
+            pass
         while True:
-            if yes_no not in yes_no_list:
+            if yes_no not in yes_no_list and isNumber is False:
                 print("# 您所輸入的選項錯誤，請再輸入一次")
             elif yes_no == "Y" or yes_no == "y":
                 self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, " \
                                "身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, " \
                                "生日 HAVING SUM(是否計算黑名單) >= 5 ORDER BY 黑名單次數 DESC; "
                 break
-            else:
+            elif yes_no == "N" or yes_no == "n":
                 self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, " \
                                "身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, " \
                                "生日 ORDER BY 黑名單次數 DESC; "
+                break
+            else:
+                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, " \
+                               "身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, " \
+                               "生日 HAVING SUM(是否計算黑名單) >=" + str(yes_no) + " ORDER BY 黑名單次數 DESC; "
                 break
         conn = pymysql_connect(**self.config)
         # cursor_object = conn.cursor()
@@ -279,9 +292,10 @@ class SimpleConnection:
         # read sql by pandas
         data = pd_read_sql(self.command, conn)
         time_stamp = str(localtime().tm_year) + str(localtime().tm_mon) + str(localtime().tm_mday)
-        self.file_path = input("# 請輸入你所想存儲資料的路徑： ")
-        self.file_path = self.file_path.replace("\\", "/").replace("\"",
-                                                                   "") + "/" + time_stamp + "_blacklist_search.csv"
+        # self.file_path = input("# 請輸入你所想存儲資料的路徑： ")
+        # self.file_path = self.file_path.replace("\\", "/").replace("\"",
+        #                                                            "") + "/" + time_stamp + "_blacklist_search.csv"
+        self.file_path = "~/Desktop/" + time_stamp + "_blacklist_search.csv"
         data.to_csv(self.file_path, encoding="Big5", sep=",", index=False)
 
 
