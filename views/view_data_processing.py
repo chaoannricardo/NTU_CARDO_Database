@@ -16,8 +16,10 @@ import configuration as config
 
 
 def insert_db():
-    location = str(location_entry.get())
-    view_CLI.quick_insert_db(location)
+    configuration = config.auto_log_in()
+    location = location_var.get()
+    view_CLI.quick_insert_db(location, configuration)
+    Label(main_frame, text="處理完成！", font=note_font_style).grid(row=row_now_list[0], column=0, sticky='w')
 
 
 if __name__ == '__main__':
@@ -43,9 +45,10 @@ if __name__ == '__main__':
 
     # 資料庫匯入區
     # 請輸入欲匯入/處理的檔案位置
+    location_var = StringVar()
     row_index += 1
     Label(main_frame, text="請輸入欲匯入/處理的檔案位置：", font=normal_font_style).grid(row=row_index, column=0, sticky='w')
-    location_entry = Entry(main_frame, font=normal_font_style, width=30).grid(row=row_index, column=1, sticky='w')
+    location_entry = Entry(main_frame, textvariable=location_var, font=normal_font_style, width=30).grid(row=row_index, column=1, sticky='w')
 
     # 執行紐
     Button(main_frame, text="資料處理\n並匯入資料庫", font=normal_font_style,
@@ -58,7 +61,7 @@ if __name__ == '__main__':
     Label(main_frame, text="範例檔案格式:", font=note_font_style).grid(row=row_index, column=1, sticky='w')
 
     introduction_text = "1. 將從台大網站下載的'xls'檔案，\n以Excel開啟後，以'CSV (逗號分隔) (*.csv)'方式另存新檔)\n2. 輸入另存新檔後csv路徑(Shift+滑鼠右鍵 => " \
-                        "複製路徑): "
+                        "複製路徑):\n**若執行期間程式停止回應，請不用擔心等待程式執行\n若資料較龐大所需時間較長"
     example_text = "請注意底線'_'為分隔符號，並請不要含有空格)\n20190314_107-2_TIP企業實習計劃說明會_精英公關.csv\n20200317_108-2_職涯講堂_" \
                    "學術生涯分享會-關於博士這條路.csv "
 
@@ -68,9 +71,14 @@ if __name__ == '__main__':
         Label(main_frame,
               text=j,
               font=note_font_style).grid(row=row_index, column=0, sticky='w')
-        Label(main_frame,
-              text=example_text_list[i],
-              font=note_font_style).grid(row=row_index, column=1, sticky='w')
+        try:
+            Label(main_frame,
+                  text=example_text_list[i],
+                  font=note_font_style).grid(row=row_index, column=1, sticky='w')
+        except IndexError:
+            pass
+
+    row_now_list = [row_index]
 
     # Licence
     # 空行

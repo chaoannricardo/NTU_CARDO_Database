@@ -65,7 +65,7 @@ def get_information(command):
     return path, sem, semester_first, semester_second, fc, sc, date
 
 
-def quick_insert_db(path):
+def quick_insert_db(path, config):
     sep_by_backslash = path.split("\\")
     name_list = sep_by_backslash[-1].split("_")
     print(name_list)
@@ -228,7 +228,7 @@ if __name__ == '__main__':
             print("# 常用場次為: 1:TCP希望種子培育計畫  2:TIP企業實習計劃說明會  3:職涯講堂  4:職業工坊  5:菁粹會客室")
             path = input(
                 "【注意事項】\n請將從台大網站下載的'xls'檔案，以Excel開啟後，以'CSV (逗號分隔) (*.csv)'方式另存新檔)\n請輸入另存新檔後csv路徑(Shift+滑鼠右鍵 => 複製路徑): ")
-            quick_insert_db(path)
+            quick_insert_db(path, config)
 
         elif command == "20":
             # 20. 【黑名單管理】計算黑名單
