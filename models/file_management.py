@@ -27,7 +27,6 @@ class File:
             self.first_cat = "菁粹會客室"
 
     def get_file(self):
-
         try:
             # edit file path to read in the file
             self.file_path = self.file_path.replace("\\", "/").replace("\"", "")

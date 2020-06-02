@@ -49,7 +49,7 @@ class Data:
             df.loc[:, '是否計算黑名單'] = black_list_add
             split_file_path_csv = self.file_path.split(".csv")
             temp_file_path = split_file_path_csv[0] + "_已計算黑名單和CARDO點數.csv"
-            df.to_csv(temp_file_path, index=None, header=True, sep=',', encoding="Big5")
+            df.to_csv(temp_file_path, index=None, header=True, sep=',', encoding="big5")
             print("# 資料處理成功，輸出'_已計算黑名單和CARDO點數.csv'")
             # Process Coss-Check CSV
             temp_pivot_source = pd_DataFrame({'出席否': df.loc[:, '出席否'].tolist(),
@@ -59,6 +59,8 @@ class Data:
                                                              aggfunc=len)
             print("# 資料處理成功，列印'_出席確認表'")
             print(confusion_matrix)
+            confusion_matrix_path = split_file_path_csv[0] + "_出席確認表.csv"
+            confusion_matrix.to_csv(confusion_matrix_path, index=None, header=True, sep=',', encoding='big5')
         except:
             print("# 資料處理失敗，程式終止")
             print("# 您所輸入資料是否格式和以前不大一樣？請聯絡維護人員")
