@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python ./views/view_UI.py
+python ./views/view_data_processing.py
