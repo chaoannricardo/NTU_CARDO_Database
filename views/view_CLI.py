@@ -241,7 +241,9 @@ if __name__ == '__main__':
         elif command == "20":
             # 20. 【黑名單管理】計算黑名單
             simple_connection = database_management.SimpleConnection(config)
-            simple_connection.black_list_search()
+            print("# 是否只顯示進入黑名單（>=5）的同學列表？(Y/N)\n或可輸入整數以顯示黑名單次數高於輸入值的名單")
+            yes_no = input("# 輸入N則會顯示所有同學目前的黑名單技術，並以降冪排序： ")
+            simple_connection.black_list_search(yes_no)
             print("# 黑名單列表產生完成，1秒後返回主選單")
             t_sleep(1)
 

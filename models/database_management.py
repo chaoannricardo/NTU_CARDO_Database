@@ -257,9 +257,7 @@ class SimpleConnection:
         self.command = ""
         self.file_path = ""
 
-    def black_list_search(self):
-        print("# 是否只顯示進入黑名單（>=5）的同學列表？(Y/N)\n或可輸入整數以顯示黑名單次數高於輸入值的名單")
-        yes_no = input("# 輸入N則會顯示所有同學目前的黑名單技術，並以降冪排序： ")
+    def black_list_search(self, yes_no):
         yes_no_list = ["Y", "y", "N", "n"]
         isNumber = False
         try:
@@ -292,9 +290,6 @@ class SimpleConnection:
         # read sql by pandas
         data = pd_read_sql(self.command, conn)
         time_stamp = str(localtime().tm_year) + str(localtime().tm_mon) + str(localtime().tm_mday)
-        # self.file_path = input("# 請輸入你所想存儲資料的路徑： ")
-        # self.file_path = self.file_path.replace("\\", "/").replace("\"",
-        #                                                            "") + "/" + time_stamp + "_blacklist_search.csv"
         self.file_path = "~/Desktop/" + time_stamp + "_blacklist_search.csv"
         data.to_csv(self.file_path, encoding="Big5", sep=",", index=False)
 
