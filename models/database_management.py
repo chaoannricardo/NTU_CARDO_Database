@@ -151,8 +151,7 @@ class DataConnection:
                 # drop the columns that is not inside main table
                 for i, j in enumerate(column_command):
                     if j not in maintable_column_list:
-                        print('# 欄位：', j, '不在被輸入表格內（通常是"主資料表"），因此將不會被輸入，\n' \
-                                          '如果有需要輸入該值，請洽程式設計者')
+                        print('# 欄位：', j, '不在被輸入表格內（通常是"主資料表"），因此將不會被輸入，\n如果有需要輸入該值，請洽程式設計者')
                         column_command.remove(j)
 
             # revise and append value that we would like to insert
