@@ -1,0 +1,2 @@
+USE cardo;
+SELECT * FROM 主資料表 WHERE 二級單位 = "國企系";
