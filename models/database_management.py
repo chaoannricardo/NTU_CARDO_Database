@@ -275,18 +275,24 @@ class SimpleConnection:
             if yes_no not in yes_no_list and isNumber is False:
                 print("# 您所輸入的選項錯誤，請再輸入一次")
             elif yes_no == "Y" or yes_no == "y":
-                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, " \
-                               "身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, " \
+                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 帳號, 電子郵件, 聯絡電話, " \
+                               "性別, " \
+                               "身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 帳號, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, " \
+                               "聯絡電話, " \
                                "生日 HAVING SUM(是否計算黑名單) >= 5 ORDER BY 黑名單次數 DESC; "
                 break
             elif yes_no == "N" or yes_no == "n":
-                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, " \
-                               "身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, " \
+                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 帳號, 電子郵件, 聯絡電話, " \
+                               "性別, " \
+                               "身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 帳號, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, " \
+                               "聯絡電話, " \
                                "生日 ORDER BY 黑名單次數 DESC; "
                 break
             else:
-                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 電子郵件, 聯絡電話, 性別, " \
-                               "身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, 聯絡電話, " \
+                self.command = "SELECT 姓名, SUM(是否計算黑名單) AS \"黑名單次數\", SUM(CARDO點數) AS \"CARDO點數總計\", 帳號, 電子郵件, 聯絡電話, " \
+                               "性別, " \
+                               "身份別, 一級單位, 二級單位, 職稱, 生日 FROM 主資料表 GROUP BY 姓名, 帳號, 性別, 身份別, 一級單位, 二級單位, 職稱, 電子郵件, " \
+                               "聯絡電話, " \
                                "生日 HAVING SUM(是否計算黑名單) >=" + str(yes_no) + " ORDER BY 黑名單次數 DESC; "
                 break
         conn = pymysql_connect(**self.config)
