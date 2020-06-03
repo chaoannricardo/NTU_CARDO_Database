@@ -13,7 +13,7 @@ def print_licence():
            "E-mail: chaoannricardo@protonmail.com\n" + \
            "Linkedin: https://www.linkedin.com/in/chaoannricardo/\n" + \
            "本程式 Source Code 網址：https://github.com/chaoannricardo/NTU_CARDO_Database\n" + \
-           "Version: 2.0 Beta; Last Modified Date: 2020/06/02\n" + \
+           "Version: 2.0; Last Modified Date: 2020/06/03\n" + \
            "程式導覽手冊：https://github.com/chaoannricardo/NTU_CARDO_Database/blob/master/GUIDE.md\n" + \
            "----------------------------------------------------------------------------------"
     print(text)
