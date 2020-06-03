@@ -25,6 +25,20 @@ def insert_db(row_index):
           font=function_font_style, fg='red').grid(row=row_index, column=0, columnspan=3)
 
 
+def patch_insert(row_index):
+    function_font_style = tkFont.Font(family="微軟正黑體", size=14, weight=tkFont.BOLD)
+    row_index += 1
+    configuration =config.auto_log_in()
+    path = patch_location_var.get()
+    comprehensible_path = path.replace("\\", "/")
+    for a, b in enumerate(os.listdir(comprehensible_path)):
+        abs_path = "\"" + path + "\\" + b + "\""
+        print(abs_path)
+        view_CLI.quick_insert_db(abs_path, configuration)
+        Label(main_frame, text=(b + "處理完成！\n出席對照表列印於終端機上！\n已計算黑名單和CARDO點數.csv & 出席確認表皆已匯出成功！\n請輸入下個檔案路徑繼續執行程式"),
+              font=function_font_style, fg='red').grid(row=row_index, column=0, columnspan=3)
+
+
 if __name__ == '__main__':
     # Basic Settings
     win = Tk()
@@ -83,6 +97,18 @@ if __name__ == '__main__':
                   font=note_font_style).grid(row=row_index, column=1, sticky='w')
         except IndexError:
             pass
+
+    # patch set up section
+    patch_location_var = StringVar()
+    row_index += 1
+    Label(main_frame, text="請輸入欲'批次'匯入/處理的檔案資料夾位置：", font=normal_font_style).grid(row=row_index, column=0, sticky='w')
+    patch_location_entry = Entry(main_frame, textvariable=patch_location_var, font=normal_font_style, width=30).grid(row=row_index,
+                                                                                                         column=1,
+                                                                                                         sticky='w')
+    # 執行紐
+    Button(main_frame, text="資料批次處理\n並匯入資料庫", font=normal_font_style,
+           bg='skyblue', width=20, height=2, command=lambda: patch_insert(row_index)).grid(row=row_index, column=2,
+                                                                                           sticky='w')
 
     # Licence
     # 空行
